@@ -8,11 +8,11 @@ type Props = {
 
 const CardBenefitsList: React.FC<Props> = ({ benefits }) => {
   return (
-    <div className="md:max-w-[1228px] md:max-h-[562px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[16px] justify-items-center">
+    <div className="lg:max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[15px] justify-items-center">
       {benefits.map((benefit) => (
         <div
           key={benefit.id}
-          className="bg-white px-5 py-8 rounded-lg w-[310px] h-[273px]"
+          className="bg-white px-5 py-8 rounded-lg w-[250px] md:w-[310px] h-[273px]"
         >
           <Image
             src={benefit.iconPath}

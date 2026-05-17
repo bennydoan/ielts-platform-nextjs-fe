@@ -6,16 +6,16 @@ import styles from "./CardBenefits.module.css";
 
 const CardBenefits: React.FC = () => {
   return (
-    <div className="flex justify-center flex-col bg-[#FFF1E1] px-[106px] py-[96] mw-[1440px] mh-[1009px]">
+    <div className="flex justify-center flex-col bg-[#FFF1E1] px-[106px] py-[96] mw-[1440px] mh-[1500px]">
       <h1
-        className={`${styles.header} text-black text-center text-5xl font-bold leading-normal my-5 tracking-tight`}
+        className={`${styles.header} text-black text-center text-2xl md:text-5xl font-bold leading-normal my-5 tracking-tight`}
       >
         Luyện thi IELTS dễ dàng
         <br />
         Tiết kiệm thời gian, đạt kết quả thật
       </h1>
       <h2
-        className={`${styles.header} text-2xl text-center text-2xl text-gray-400 max-w-2xl mx-auto mb-10`}
+        className={`${styles.header} text-1xl md:text-2xl text-center text-gray-400 max-w-2xl mx-auto mb-10`}
       >
         Nền tảng luyện thi trực tuyến giúp bạn học hiệu quả hơn, tiết kiệm chi
         phí và hướng đến kết quả đầu ra thực tế.
