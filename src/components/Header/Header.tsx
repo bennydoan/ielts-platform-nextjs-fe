@@ -1,6 +1,7 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import Style from "./Header.module.css";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
 
@@ -40,7 +41,7 @@ function Header() {
       <ul className="hidden lg:flex space-x-8 items-center absolute left-1/2 -translate-x-1/2">
         <li>
           <Link
-            className={`${Style.textForm} font-semibold hover:text-[#F5222D] md:text-base lg:text-lg text-black`}
+            className={`font-semibold hover:text-[#F5222D] md:text-base lg:text-lg text-black`}
             href="/exam-library"
           >
             Thư viện đề thi
@@ -48,7 +49,7 @@ function Header() {
         </li>
         <li>
           <Link
-            className={`${Style.textForm} hover:text-[#F5222D] font-semibold md:text-base lg:text-lg text-black`}
+            className={` hover:text-[#F5222D] font-semibold md:text-base lg:text-lg text-black`}
             href="/about-us"
           >
             Về chúng tôi
@@ -56,7 +57,7 @@ function Header() {
         </li>
         <li>
           <Link
-            className={`${Style.textForm} font-semibold hover:text-[#F5222D] md:text-base lg:text-lg text-black`}
+            className={`font-semibold hover:text-[#F5222D] md:text-base lg:text-lg text-black`}
             href="/Blogs"
           >
             Blogs
@@ -67,14 +68,14 @@ function Header() {
       <div className="hidden lg:flex items-center gap-6 ml-auto">
         <Link
           href="/offline-course"
-          className={`${Style.textForm} text-[#F5222D] font-semibold text-body-2 hover:underline max-w-36 text-center`}
+          className={`text-[#F5222D] font-semibold text-body-2 hover:underline max-w-36 text-center`}
         >
           Đăng ký <br /> học trực tiếp
         </Link>
 
         <Link
           href="/auth/login"
-          className={`${Style.textForm} bg-[#F5222D] text-white text-body leading-[21px] px-6 py-2 rounded-md hover:bg-primary/80 min-h-10`}
+          className={`bg-[#F5222D] text-white text-body leading-[21px] px-6 py-2 rounded-md hover:bg-primary/80 min-h-10`}
         >
           Đăng nhập
         </Link>
@@ -120,19 +121,19 @@ function Header() {
 
         <div className="flex flex-col gap-3 mt-5 w-full">
           <Link
-            className={`${Style.textForm} border border-neutral-5 rounded-lg py-2 text-center text-black`}
+            className={`border border-neutral-5 rounded-lg py-2 text-center text-black`}
             href="/exam-library"
           >
             Thư viện đề thi
           </Link>
           <Link
-            className={`${Style.textForm} border border-neutral-5 rounded-lg py-2 text-center text-black`}
+            className={` border border-neutral-5 rounded-lg py-2 text-center text-black`}
             href="/about-us"
           >
             Về chúng tôi
           </Link>
           <Link
-            className={`${Style.textForm} border border-neutral-5 rounded-lg py-2 text-center text-black`}
+            className={`$border border-neutral-5 rounded-lg py-2 text-center text-black`}
             href="/Blogs"
           >
             Blogs
@@ -140,13 +141,13 @@ function Header() {
 
           <div className="flex flex-col items-center w-full pt-8 gap-2">
             <Link
-              className={`${Style.textForm} font-semibold text-[#F5222D]`}
+              className={`font-semibold text-[#F5222D]`}
               href="/offline-course"
             >
               Join Our Offline Course
             </Link>
             <Link
-              className={`${Style.textForm} bg-[#F5222D] text-white w-full text-center py-2 rounded-md font-medium`}
+              className={` bg-[#F5222D] text-white w-full text-center py-2 rounded-md font-medium`}
               href="/auth/login"
             >
               Sign In
