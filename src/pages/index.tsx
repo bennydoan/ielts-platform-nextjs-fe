@@ -1,10 +1,7 @@
-import {
-  CallToActionSlider,
-  CardCTA,
-  CardBenefits,
-  FeatureBox,
-} from "@/components";
+import { CallToActionSlider } from "@/components";
 import { ctaSlidesMock } from "@/data";
+import { CardCTA, CardBenefits } from "../components";
+import { FeatureBox } from "@/components";
 
 export default function Home() {
   return (
@@ -12,7 +9,7 @@ export default function Home() {
       <FeatureBox />
       <CardBenefits />
       <section className="mx-auto w-full max-w-[1440px] px-4 py-6">
-        <div className="rounded-3xl bg-white shadow-sm ring-1 ring-zinc-200 overflow-hidden">
+        <div className="rounded-3xl bg-white overflow-hidden">
           <CallToActionSlider slides={ctaSlidesMock} intervalMs={4500} />
         </div>
       </section>
