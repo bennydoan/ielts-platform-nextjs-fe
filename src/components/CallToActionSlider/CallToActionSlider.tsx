@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Slide = {
@@ -26,104 +27,86 @@ export default function CallToActionSlider({
 
   const extended = useMemo(() => {
     if (total <= 1) return realSlides;
-    const first = realSlides[0];
-    const last = realSlides[total - 1];
-    return [last, ...realSlides, first];
+    return [realSlides[total - 1], ...realSlides, realSlides[0]];
   }, [realSlides, total]);
 
   const [index, setIndex] = useState(0);
-  const [enableTransition, setEnableTransition] = useState(true);
-
+  const [transitioning, setTransitioning] = useState(false);
   const [paused, setPaused] = useState(false);
-  const pausedRef = useRef(false);
+
+  const indexRef = useRef(index);
+  indexRef.current = index;
+  const pausedRef = useRef(paused);
   pausedRef.current = paused;
 
-  const [tick, setTick] = useState(0);
-
   useEffect(() => {
-    if (total > 1) {
-      setEnableTransition(false);
-      setIndex(1);
-    } else {
-      setIndex(0);
-    }
+    setTransitioning(false);
+    setIndex(total > 1 ? 1 : 0);
   }, [total]);
+
+  // Jump instantly (no animation), then re-enable transition after browser paints
+  const jumpTo = useCallback((newIndex: number) => {
+    setTransitioning(false);
+    setIndex(newIndex);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setTransitioning(true));
+    });
+  }, []);
+
+  const goTo = useCallback((newIndex: number) => {
+    setTransitioning(true);
+    setIndex(newIndex);
+  }, []);
 
   const next = useCallback(() => {
     if (total <= 1) return;
-    setEnableTransition(true);
-    setIndex((i) => i + 1);
-  }, [total]);
+    goTo(indexRef.current + 1);
+  }, [total, goTo]);
 
   const prev = useCallback(() => {
     if (total <= 1) return;
-    setEnableTransition(true);
-    setIndex((i) => i - 1);
-  }, [total]);
-
-  const markInteracted = () => {
-    setTick((t) => t + 1);
-  };
+    goTo(indexRef.current - 1);
+  }, [total, goTo]);
 
   useEffect(() => {
-    if (!autoPlay || total <= 1) return;
-    if (paused) return;
-
+    if (!autoPlay || total <= 1 || paused) return;
     const id = window.setTimeout(() => {
       if (pausedRef.current) return;
-      setEnableTransition(true);
+      setTransitioning(true);
       setIndex((i) => i + 1);
     }, intervalMs);
-
     return () => window.clearTimeout(id);
-  }, [autoPlay, intervalMs, total, index, paused, tick]);
+  }, [autoPlay, intervalMs, total, index, paused]);
 
-  const onTransitionEnd = () => {
+  const onTransitionEnd = useCallback(() => {
     if (total <= 1) return;
-
-    if (index === extended.length - 1) {
-      setEnableTransition(false);
-      setIndex(1);
-      return;
-    }
-
-    if (index === 0) {
-      setEnableTransition(false);
-      setIndex(total);
-      return;
-    }
-  };
-
-  useEffect(() => {
-    if (!enableTransition) {
-      const id = requestAnimationFrame(() => setEnableTransition(true));
-      return () => cancelAnimationFrame(id);
-    }
-  }, [enableTransition]);
+    const current = indexRef.current;
+    if (current >= extended.length - 1) jumpTo(1);
+    else if (current <= 0) jumpTo(total);
+  }, [total, extended.length, jumpTo]);
 
   if (total === 0) return null;
 
-  const activeDot = total <= 1 ? 0 : (index - 1 + total) % total;
+  const activeDot = total <= 1 ? 0 : ((index - 1) % total + total) % total;
 
   return (
     <div
-      className="relative overflow-hidden rounded-3xl"
+      className="relative overflow-hidden rounded-3xl group"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       <div
         onTransitionEnd={onTransitionEnd}
-        className={[
-          "flex will-change-transform",
-          enableTransition
-            ? "transition-transform duration-250 ease-out"
-            : "transition-none",
-        ].join(" ")}
+        className={`flex will-change-transform ${
+          transitioning
+            ? "transition-transform duration-[250ms] ease-out"
+            : "transition-none"
+        }`}
         style={{ transform: `translateX(-${index * 100}%)` }}
       >
         {extended.map((s, i) => (
           <div key={`${s.id}-${i}`} className="w-full flex-shrink-0">
-            <div className="relative w-full aspect-[1440/888]">
+            <Link href={s.href ?? "#"} className="relative block w-full aspect-[1440/888]">
               <Image
                 src={s.imageSrc}
                 alt={s.imageAlt}
@@ -132,7 +115,7 @@ export default function CallToActionSlider({
                 sizes="(max-width: 1440px) 100vw, 1440px"
                 className="object-cover"
               />
-            </div>
+            </Link>
           </div>
         ))}
       </div>
@@ -141,26 +124,18 @@ export default function CallToActionSlider({
         <>
           <button
             type="button"
-            onClick={() => {
-              markInteracted();
-              setPaused(false);
-              prev();
-            }}
+            onClick={prev}
             aria-label="Previous slide"
-            className="absolute left-0 top-1/2 z-50 -translate-y-1/2 h-14 w-10 bg-zinc-300/80 text-lg text-white flex items-center justify-center hover:bg-zinc-300"
+            className="absolute left-0 top-1/2 z-50 -translate-y-1/2 h-14 w-10 bg-zinc-300/80 text-lg text-white flex items-center justify-center hover:bg-zinc-300 opacity-0 group-hover:opacity-100 transition-opacity"
           >
             ‹
           </button>
 
           <button
             type="button"
-            onClick={() => {
-              markInteracted();
-              setPaused(false);
-              next();
-            }}
+            onClick={next}
             aria-label="Next slide"
-            className="absolute right-0 top-1/2 z-50 -translate-y-1/2 h-14 w-10 bg-zinc-300/80 text-lg text-white flex items-center justify-center hover:bg-zinc-300"
+            className="absolute right-0 top-1/2 z-50 -translate-y-1/2 h-14 w-10 bg-zinc-300/80 text-lg text-white flex items-center justify-center hover:bg-zinc-300 opacity-0 group-hover:opacity-100 transition-opacity"
           >
             ›
           </button>
@@ -170,14 +145,9 @@ export default function CallToActionSlider({
               <button
                 key={i}
                 type="button"
-                onClick={() => {
-                  markInteracted();
-                  setPaused(false);
-                  setEnableTransition(true);
-                  setIndex(i + 1);
-                }}
+                onClick={() => goTo(i + 1)}
                 aria-label={`Go to slide ${i + 1}`}
-                className={`h-2 w-2 rounded-full ${
+                className={`h-2 w-2 rounded-full transition-colors ${
                   i === activeDot ? "bg-rose-500" : "bg-zinc-300"
                 }`}
               />
