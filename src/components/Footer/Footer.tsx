@@ -54,15 +54,38 @@ function Footer() {
             <div className="flex flex-col gap-4">
               <h3 className="text-black font-bold">MENU</h3>
               <ul>
-                <li className="text-black">Về chúng tôi</li>
-                <li className="text-black">Blog</li>
-                <li className="text-black">Liên hệ</li>
+                <li>
+                  <Link
+                    href="/about-us"
+                    className="text-black hover:text-[#F5222D]"
+                  >
+                    Về chúng tôi
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/blogs"
+                    className="text-black hover:text-[#F5222D]"
+                  >
+                    Blogs
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="https://www.facebook.com/nhanvaneducation"
+                    className="text-black hover:text-[#F5222D]"
+                  >
+                    Liên hệ
+                  </Link>
+                </li>
+
                 <li>
                   <Link
                     href="/offline-course"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-bold text-[#F5222D]"
+                    className="font-bold text-[#F5222D] hover:underline"
                   >
                     Tham gia cộng đồng
                   </Link>
@@ -75,10 +98,23 @@ function Footer() {
             <div className="flex flex-col gap-4">
               <h3 className="text-black font-bold">THI THỬ</h3>
               <ul>
-                <li className="text-black">Bài nghe</li>
-                <li className="text-[#8c8c8c]">Bài Viết(comming Soon)</li>
-                <li className="text-[#8c8c8c]">Bài Đọc(comming Soon)</li>
-                <li className="text-[#8c8c8c]">Bài Nghe(comming Soon)</li>
+                <li>
+                  <Link
+                    href="https://www.facebook.com/nhanvaneducation"
+                    className="text-black hover:text-[#F5222D]"
+                  >
+                    Bài nghe
+                  </Link>
+                </li>
+                <li className="text-[#8c8c8c] hover:text-[#F5222D] cursor-not-allowed">
+                  Bài Viết(comming Soon)
+                </li>
+                <li className="text-[#8c8c8c] hover:text-[#F5222D] cursor-not-allowed">
+                  Bài Đọc(comming Soon)
+                </li>
+                <li className="text-[#8c8c8c] hover:text-[#F5222D] cursor-not-allowed">
+                  Bài Nghe(comming Soon)
+                </li>
               </ul>
             </div>
           </div>
