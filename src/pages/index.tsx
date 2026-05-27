@@ -2,6 +2,7 @@ import { CallToActionSlider } from "@/components";
 import { ctaSlidesMock } from "@/data";
 import { CardCTA, CardBenefits } from "../components";
 import { FeatureBox } from "@/components";
+import { CourseBox } from "@/components";
 
 export default function Home() {
   return (
@@ -13,6 +14,8 @@ export default function Home() {
           <CallToActionSlider slides={ctaSlidesMock} intervalMs={4500} />
         </div>
       </section>
+      <CourseBox />
+
       <CardCTA />
     </main>
   );
