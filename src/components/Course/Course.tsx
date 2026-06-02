@@ -2,7 +2,8 @@
 import Link from "next/link";
 import { GoLinkExternal } from "react-icons/go";
 import TestCategoriesMenu from "./TestCategoriesMenu";
-import TestList from "./TestList";
+import dynamic from "next/dynamic";
+const TestList = dynamic(() => import("./TestList"), { ssr: false });
 import { useState } from "react";
 
 function Course() {
