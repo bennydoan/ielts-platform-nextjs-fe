@@ -3,6 +3,7 @@ import { ctaSlidesMock } from "@/data";
 import { CardCTA, CardBenefits } from "../components";
 import { FeatureBox } from "@/components";
 import { CourseBox } from "@/components";
+import { Testimonnial } from "@/components";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
         </div>
       </section>
       <CourseBox />
+      <Testimonnial />
 
       <CardCTA />
     </main>

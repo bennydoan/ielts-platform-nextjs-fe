@@ -10,3 +10,5 @@ export { default as CardBenefitsList } from "./CardBenefits/CardBenefitsList";
 export { default as FeatureBox } from "./Feature/Feature";
 
 export { default as CourseBox } from "./Course/Course";
+
+export { default as Testimonnial } from "./Testimonials/Testimonial";
