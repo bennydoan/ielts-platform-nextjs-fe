@@ -22,7 +22,7 @@ function TestList({ categoryShown }: { categoryShown: string | null }) {
         className="flex items-center cursor-pointer shrink-0"
       >
         <Image
-          src="/images/Course/Pagination-Next.svg"
+          src="/images/Course/Pagination-Prev.svg"
           alt="nextBtn"
           width={48}
           height={48}
