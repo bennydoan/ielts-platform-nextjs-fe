@@ -5,3 +5,4 @@ export {};
 export * from "./ctaSlides";
 export { cardBenefits } from "./CardBenefitsData";
 export type { CardBenefit } from "./CardBenefitsData";
+export { userTestimonials } from "./UserTestimonial";
