@@ -75,7 +75,7 @@ function Header() {
 
         <Link
           href="/auth/login"
-          className={`bg-[#F5222D] text-white text-body leading-[21px] px-6 py-2 rounded-md hover:bg-primary/80 min-h-10`}
+          className={`bg-[#F5222D] text-white text-body leading-[21px] px-6 py-2 rounded-md  hover:opacity-80 cursor-pointer min-h-10`}
         >
           Đăng nhập
         </Link>

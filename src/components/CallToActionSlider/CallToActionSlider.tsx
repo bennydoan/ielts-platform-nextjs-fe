@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -87,7 +85,7 @@ export default function CallToActionSlider({
 
   if (total === 0) return null;
 
-  const activeDot = total <= 1 ? 0 : ((index - 1) % total + total) % total;
+  const activeDot = total <= 1 ? 0 : (((index - 1) % total) + total) % total;
 
   return (
     <div
@@ -106,7 +104,10 @@ export default function CallToActionSlider({
       >
         {extended.map((s, i) => (
           <div key={`${s.id}-${i}`} className="w-full flex-shrink-0">
-            <Link href={s.href ?? "#"} className="relative block w-full aspect-[1440/888]">
+            <Link
+              href={s.href ?? "#"}
+              className="relative block w-full aspect-[1440/888]"
+            >
               <Image
                 src={s.imageSrc}
                 alt={s.imageAlt}
