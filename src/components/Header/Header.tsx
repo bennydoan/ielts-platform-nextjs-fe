@@ -123,18 +123,21 @@ function Header() {
           <Link
             className={`border border-neutral-5 rounded-lg py-2 text-center text-black`}
             href="/exam-library"
+            onClick={() => setIsClicked(false)}
           >
             Thư viện đề thi
           </Link>
           <Link
             className={` border border-neutral-5 rounded-lg py-2 text-center text-black`}
             href="/about-us"
+            onClick={() => setIsClicked(false)}
           >
             Về chúng tôi
           </Link>
           <Link
             className={`$border border-neutral-5 rounded-lg py-2 text-center text-black`}
             href="/Blogs"
+            onClick={() => setIsClicked(false)}
           >
             Blogs
           </Link>
@@ -143,12 +146,14 @@ function Header() {
             <Link
               className={`font-semibold text-[#F5222D]`}
               href="/offline-course"
+              onClick={() => setIsClicked(false)}
             >
               Join Our Offline Course
             </Link>
             <Link
               className={` bg-[#F5222D] text-white w-full text-center py-2 rounded-md font-medium`}
               href="/auth/login"
+              onClick={() => setIsClicked(false)}
             >
               Sign In
             </Link>

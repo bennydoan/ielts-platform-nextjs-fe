@@ -4,15 +4,16 @@ import type { CardBenefit } from "../../data";
 
 type Props = {
   benefits: CardBenefit[];
+  backgroundColor: string;
 };
 
-const CardBenefitsList: React.FC<Props> = ({ benefits }) => {
+function CardBenefitsList({ benefits, backgroundColor }: Props) {
   return (
     <div className="lg:max-w-[1500px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[15px] justify-items-center">
       {benefits.map((benefit) => (
         <div
           key={benefit.id}
-          className="bg-white px-5 py-8 rounded-lg w-[250px] md:w-[310px] h-[273px]"
+          className={`${backgroundColor} px-5 py-8 rounded-lg w-[250px] md:w-[310px] h-[273px]`}
         >
           <Image
             src={benefit.iconPath}
@@ -27,6 +28,6 @@ const CardBenefitsList: React.FC<Props> = ({ benefits }) => {
       ))}
     </div>
   );
-};
+}
 
 export default CardBenefitsList;

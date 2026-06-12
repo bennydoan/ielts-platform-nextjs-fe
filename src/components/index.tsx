@@ -16,3 +16,5 @@ export { default as Testimonnial } from "./Testimonials/Testimonial";
 export { default as LoginForm } from "./Auth/LoginForm";
 export { default as RegisterForm } from "./Auth/RegisterForm";
 export { default as AuthIndex } from "./Auth/AuthIndex";
+
+export { default as AboutUs } from "./AboutUsComponent/AboutUs";
