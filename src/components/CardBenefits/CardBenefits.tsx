@@ -19,7 +19,7 @@ const CardBenefits: React.FC = () => {
         Nền tảng luyện thi trực tuyến giúp bạn học hiệu quả hơn, tiết kiệm chi
         phí và hướng đến kết quả đầu ra thực tế.
       </h2>
-      <CardBenefitsList benefits={cardBenefits} />
+      <CardBenefitsList backgroundColor="bg-white" benefits={cardBenefits} />
       <div className="mx-auto text-center my-10">
         <Link
           href="/about-us"
