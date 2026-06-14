@@ -18,3 +18,5 @@ export { default as RegisterForm } from "./Auth/RegisterForm";
 export { default as AuthIndex } from "./Auth/AuthIndex";
 
 export { default as AboutUs } from "./AboutUsComponent/AboutUs";
+
+export { default as CourseRegistrationPage } from "./CourseRegistration/CourseRegistrationPage";

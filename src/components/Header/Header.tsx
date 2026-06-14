@@ -28,7 +28,7 @@ function Header() {
   }, []);
 
   return (
-    <nav className="flex  justify-between bg-white items-center relative h-[116px] px-5">
+    <nav className="flex justify-between bg-white items-center relative h-[116px] px-5 z-10">
       <Link href="/" className="hidden lg:block absolute left-7 top-2">
         <Image
           alt="NhanVanLogo"

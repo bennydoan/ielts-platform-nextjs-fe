@@ -1,7 +1,5 @@
 import Image from "next/image";
-import CardBenefitsList from "../CardBenefits/CardBenefitsList";
-import { cardBenefits } from "../../data";
-
+import WhyChoosingUs from "./WhyChoosingUs";
 function ContentContainer() {
   return (
     <div className="p-10 w-full flex flex-col gap-16 lg:w-[95%] xl:w-[60%]">
@@ -43,31 +41,10 @@ function ContentContainer() {
       </div>
 
       {/* first div */}
-
-      <div className="flex flex-col gap-10">
-        <div className="flex flex-col gap-6 lg:w-[50%]">
-          <h1 className="font-bold text-black text-3xl">
-            Vì sao chọn chúng tôi?
-          </h1>
-          <div className="flex flex-col gap-2">
-            <p className="text-black">
-              Chúng tôi mang đến giải pháp kiểm tra ngôn ngữ sáng tạo trong một
-              không gian học tập thoải mái và đầy đủ thiết bị.
-            </p>
-            <p className="text-black">
-              Trung tâm của chúng tôi nổi bật với phòng thi cách âm, hệ thống
-              công nghệ hiện đại và không gian truyền cảm hứng – tạo nên một
-              trải nghiệm học và thi vừa nghiêm túc vừa tích cực.
-            </p>
-          </div>
-        </div>
-
-        {/* for CTA */}
-        <CardBenefitsList
-          benefits={cardBenefits}
-          backgroundColor="bg-[#f0f0f0]"
-        />
-      </div>
+      <WhyChoosingUs
+        text1="Chúng tôi mang đến giải pháp kiểm tra ngôn ngữ sáng tạo trong một không gian học tập thoải mái và đầy đủ thiết bị."
+        text2="Trung tâm của chúng tôi nổi bật với phòng thi cách âm, hệ thống công nghệ hiện đại và không gian truyền cảm hứng – tạo nên một trải nghiệm học và thi vừa nghiêm túc vừa tích cực."
+      />
     </div>
   );
 }
