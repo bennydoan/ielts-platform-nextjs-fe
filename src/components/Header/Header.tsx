@@ -1,18 +1,18 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
+// import { PiSignOut } from "react-icons/pi";
 
 import { useState, useEffect } from "react";
 
 function Header() {
   // State for button clicking
   const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false); // profile
 
   function handleClick() {
-    setIsClicked(true);
+    setIsClicked(!isClicked);
   }
 
   // handle the menu when the size is back from lg ->medium
@@ -79,6 +79,42 @@ function Header() {
         >
           Đăng nhập
         </Link>
+        {/* this button will be switched after LogIn */}
+        {/* <div className="flex gap-2 items-center justify-center relative">
+          <div className="relative border-2 border-[#F5222D] rounded-full h-[36px] w-[36px] overflow-hidden">
+            <Image
+              src="/images/NhanVanLogo.svg"
+              fill
+              alt="NhanVanLogo"
+              className="object-cover"
+            />
+          </div>
+          <div
+            className="block cursor-pointer"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+          >
+            <p className="text-black font-bold text-sm">Dinh Tuan Doan</p>
+            <p className="text-gray-500 text-sm">bennydoan1111@gmail.com</p>
+          </div>
+
+          {dropdownOpen && (
+            <div className="border rounded-md bg-white absolute top-13 left-2 w-full h-auto py-2">
+              <ul className="flex flex-col gap-2">
+                <li className="w-full hover:bg-gray-200 cursor-pointer h-[40px] flex items-center p-4">
+                  <Link href="/profile" className="text-black">
+                    Hồ sơ
+                  </Link>
+                </li>
+
+                <li className="w-full hover:bg-[#F5222D]/30 cursor-pointer h-[40px] flex items-center p-4">
+                  <button className="text-[#F5222D] cursor-pointer">
+                    Đăng xuất
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div> */}
       </div>
 
       {/* Mobile Screen */}
@@ -121,6 +157,28 @@ function Header() {
 
         <div className="flex flex-col gap-3 mt-5 w-full">
           <Link
+            className={`border border-neutral-5 rounded-lg py-2 text-center text-black flex items-center justify-center gap-2`}
+            href="/profile"
+            onClick={() => setIsClicked(false)}
+          >
+            <div className="relative border-2 border-[#F5222D] rounded-full h-[36px] w-[36px] overflow-hidden">
+              <Image
+                src="/images/NhanVanLogo.svg"
+                fill
+                alt="NhanVanLogo"
+                className="object-cover"
+              />
+            </div>
+            <div
+              className="block cursor-pointer"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              <p className="text-black font-bold text-sm">Dinh Tuan Doan</p>
+              <p className="text-gray-500 text-sm">bennydoan1111@gmail.com</p>
+            </div>
+          </Link>
+
+          <Link
             className={`border border-neutral-5 rounded-lg py-2 text-center text-black`}
             href="/exam-library"
             onClick={() => setIsClicked(false)}
@@ -157,6 +215,17 @@ function Header() {
             >
               Sign In
             </Link>
+
+            {/* Sign out
+            <button
+              className="bg-[#F5222D] text-white w-full text-center py-2 rounded-md font-medium flex items-center justify-center gap-2"
+              onClick={() => {
+                setIsClicked(false);
+              }}
+            >
+              <PiSignOut />
+              Sign Out
+            </button> */}
           </div>
         </div>
       </div>
