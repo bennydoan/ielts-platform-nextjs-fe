@@ -72,7 +72,11 @@ function BlogContent({ selectedCategories }: Props) {
       <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 md:gap-7 sm:gap-2 lg:order-3">
         {shownBlogsPerPage.map((blog) => {
           return (
-            <Link key={blog.id} href="/" className=" flex flex-col gap-2 ">
+            <Link
+              key={blog.id}
+              href="/BlogContent"
+              className=" flex flex-col gap-2 "
+            >
               <div className="w-full h-[250px] rounded-lg overflow-hidden relative">
                 <Image
                   src={`${blog.img}`}
