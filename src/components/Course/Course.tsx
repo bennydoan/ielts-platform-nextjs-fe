@@ -22,7 +22,7 @@ function Course() {
           </p>
         </div>
         <Link
-          href="/all-test"
+          href="/exam-library"
           className="hidden lg:flex flex-row items-center gap-1 text-[#F5222D] hover:underline"
         >
           <span>Xem tất cả</span> <GoLinkExternal />

@@ -21,3 +21,4 @@ export { default as AboutUs } from "./AboutUsComponent/AboutUs";
 
 export { default as CourseRegistrationPage } from "./CourseRegistration/CourseRegistrationPage";
 export { default as BlogHomePage } from "./Blogs/BlogHomePage";
+export { default as ExamLibrary } from "./ExamLibrary/ExamLibrary";
