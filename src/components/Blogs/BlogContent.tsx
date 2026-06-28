@@ -17,6 +17,7 @@ function BlogContent({ selectedCategories }: Props) {
     selectedCategories.length === 0
       ? Blogs
       : Blogs.filter((b) => selectedCategories.includes(b.category));
+
   const item_per_page = 8;
 
   const [currentPage, setCurrenPage] = useState(1);
