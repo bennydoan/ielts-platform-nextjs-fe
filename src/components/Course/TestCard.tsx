@@ -1,14 +1,22 @@
 // src/components/Course/TestCard.tsx
 import Image from "next/image";
+import Link from "next/link";
 
 type Props = {
+  testId: string | number;
   category: string;
   title: string;
   durations: number;
   backgroundColor: string;
 };
 
-function TestCard({ category, title, durations, backgroundColor }: Props) {
+function TestCard({
+  testId,
+  category,
+  title,
+  durations,
+  backgroundColor,
+}: Props) {
   return (
     <div
       className="w-full h-[177px] shrink-0 rounded-lg p-5 flex flex-col justify-between relative overflow-hidden"
@@ -45,9 +53,12 @@ function TestCard({ category, title, durations, backgroundColor }: Props) {
           <p className="text-black">{durations} mins taken</p>
         </div>
       </div>
-      <button className="text-button-mobile text-black md:text-button-sm w-full py-2 rounded-md cursor-pointer bg-white/30 hover:bg-white/80 hover:brightness-125 hover:shadow-md transition-all duration-300 ease-in-out">
+      <Link
+        href={`/ielts-tests/${testId}`}
+        className="text-button-mobile text-black md:text-button-sm w-full py-2 rounded-md cursor-pointer bg-white/30 hover:bg-white/80 hover:brightness-125 hover:shadow-md transition-all duration-300 ease-in-out text-center"
+      >
         Take the test now
-      </button>
+      </Link>
     </div>
   );
 }

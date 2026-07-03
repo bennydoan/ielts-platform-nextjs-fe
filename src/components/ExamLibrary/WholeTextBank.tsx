@@ -35,8 +35,6 @@ function WholeTestBank({ header }: Props) {
   const totalPages = Math.ceil(filteredCat.length / items_per_page);
   const [currentPage, setCurrenPage] = useState(1);
 
-  console.log(filteredCat);
-
   // show tests per page
 
   const shownTest = filteredCat.slice(
@@ -77,6 +75,7 @@ function WholeTestBank({ header }: Props) {
             return (
               <TestCard
                 key={index}
+                testId={String(cat.id)}
                 category={cat.category}
                 title={cat.title}
                 durations={cat.durations}
