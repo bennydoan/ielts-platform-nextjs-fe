@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 type Props = {
-  testId: string | number;
+  testId: string;
   category: string;
   title: string;
   durations: number;
@@ -54,7 +54,7 @@ function TestCard({
         </div>
       </div>
       <Link
-        href={`/ielts-tests/${testId}`}
+        href={`/ielts-tests/${category}/${testId}`}
         className="text-button-mobile text-black md:text-button-sm w-full py-2 rounded-md cursor-pointer bg-white/30 hover:bg-white/80 hover:brightness-125 hover:shadow-md transition-all duration-300 ease-in-out text-center"
       >
         Take the test now
