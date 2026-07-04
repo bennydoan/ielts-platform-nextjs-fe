@@ -51,6 +51,7 @@ function TestList({ categoryShown }: { categoryShown: string | null }) {
               <SwiperSlide key={course.id} style={{ width: "280px" }}>
                 <TestCard
                   category={course.category}
+                  testId={String(course.id)}
                   title={course.title}
                   durations={course.durations}
                   backgroundColor={
