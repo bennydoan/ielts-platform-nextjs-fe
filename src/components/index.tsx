@@ -23,3 +23,4 @@ export { default as CourseRegistrationPage } from "./CourseRegistration/CourseRe
 export { default as BlogHomePage } from "./Blogs/BlogHomePage";
 export { default as ExamLibrary } from "./ExamLibrary/ExamLibrary";
 export { default as TestHistoryPage } from "./TestPageHistory/TestHistoryPage";
+export { default as ProfilePage } from "./ProfilePage/ProfilePage";
