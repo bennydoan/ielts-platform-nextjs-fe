@@ -1,11 +1,18 @@
 import ModeCard from "./ModeCard";
+import { useState } from "react";
 
 type TimeSetUpProps = {
   onClose: () => void;
   defaultTime: number;
+  category: string;
+  testId: number;
 };
 
-function TimeSetUp({ onClose, defaultTime }: TimeSetUpProps) {
+// set duration time
+
+function TimeSetUp({ onClose, defaultTime, category, testId }: TimeSetUpProps) {
+  const [duration, setDuration] = useState(defaultTime);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="relative bg-white border-3 h-auto py-5 px-10 w-full lg:w-[90%] xl:w-[60%] md:py-15 md:px-20 rounded-xl">
@@ -19,6 +26,7 @@ function TimeSetUp({ onClose, defaultTime }: TimeSetUpProps) {
           <ModeCard
             title="Practise Mode"
             description="Choose how long you want to take the test"
+            href={`/ielts-tests/${category}/${testId}?mode=practice&duration=${duration}`}
           >
             <div className="mb-5 sm:h-[98px] flex flex-col justify-center">
               <label className="text-gray-400">
@@ -27,9 +35,10 @@ function TimeSetUp({ onClose, defaultTime }: TimeSetUpProps) {
               </label>
               <input
                 type="number"
-                defaultValue={defaultTime}
+                value={duration}
+                onChange={(e) => setDuration(Number(e.target.value))}
                 step="1"
-                min={defaultTime}
+                min={duration}
                 max={90}
                 className="w-[80%] border border-gray-300 rounded-lg px-4 py-2 text-black outline-none focus:border-[#F5222D] transition"
               />
@@ -38,6 +47,7 @@ function TimeSetUp({ onClose, defaultTime }: TimeSetUpProps) {
           <ModeCard
             title="Actual Mode"
             description="Choose how long you want to take the test"
+            href={`/ielts-tests/${category}/${testId}?mode=practical&duration=${category.toLocaleLowerCase() === "reading" ? 60 : 30}`}
           >
             <div className="mb-5">
               <p className="text-gray-400">

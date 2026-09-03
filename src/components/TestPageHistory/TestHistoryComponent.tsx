@@ -77,6 +77,8 @@ function TestHistoryComponent({ id }: Props) {
       {showSetUp && (
         <TimeSetUp
           defaultTime={filteredData[0].durations}
+          category={filteredData[0].category}
+          testId={filteredData[0].id}
           onClose={() => setShowSetUp(false)}
         />
       )}

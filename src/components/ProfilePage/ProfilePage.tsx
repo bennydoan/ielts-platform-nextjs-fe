@@ -5,7 +5,7 @@ import { useState } from "react";
 function ProfilePage() {
   const [active, setActive] = useState<"profile" | "analysis">("profile");
   return (
-    <div className="bg-[#f5f5f5] h-auto w-full py-18 px-10">
+    <div className="bg-[#f5f5f5] min-h-screen w-full py-18 px-10 flex items-center justify-center">
       <div className="bg-white w-full h-auto flex lg:flex-row flex-col">
         {/* first div  */}
         <Navigation active={active} setActive={setActive} />
