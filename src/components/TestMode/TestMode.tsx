@@ -69,13 +69,15 @@ function TestMode() {
       />
 
       {/* Test section Controller */}
-      <TestFooter
-        listeningTest={test}
-        selectedSection={selectedSection}
-        setSelectedSection={setSelectedSection}
-        answers={answers}
-        onSubmit={handleSubmitTest}
-      />
+      {test && (
+        <TestFooter
+          listeningTest={test}
+          selectedSection={selectedSection}
+          setSelectedSection={setSelectedSection}
+          answers={answers}
+          onSubmit={handleSubmitTest}
+        />
+      )}
     </div>
   );
 }

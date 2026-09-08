@@ -13,7 +13,7 @@ export const ListOfBGColour = [
 ] as const;
 
 export interface CourseData {
-  id: number;
+  id: number | string;
   title: string;
   durations: number;
   category: (typeof TestCategory)[number];

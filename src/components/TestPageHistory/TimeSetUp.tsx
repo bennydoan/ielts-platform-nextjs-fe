@@ -5,7 +5,7 @@ type TimeSetUpProps = {
   onClose: () => void;
   defaultTime: number;
   category: string;
-  testId: number;
+  testId: number | string;
 };
 
 // set duration time
