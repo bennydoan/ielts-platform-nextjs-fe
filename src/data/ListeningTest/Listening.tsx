@@ -10,7 +10,7 @@ export type ListeningQuestionType =
 // | "sentence-completion";
 
 export interface ListeningTest {
-  courseId: number; // matches courseDatas.id (21-40 range)
+  courseId: number | string; // matches courseDatas.id (21-40 range)
   sections: ListeningSection[];
   isPlaceholder?: boolean;
 }

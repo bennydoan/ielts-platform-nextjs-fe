@@ -1,4 +1,3 @@
-"Use Client";
 import Link from "next/link";
 import { GoLinkExternal } from "react-icons/go";
 import TestCategoriesMenu from "./TestCategoriesMenu";

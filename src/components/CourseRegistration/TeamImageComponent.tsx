@@ -1,7 +1,7 @@
 import Image from "next/image";
 function TeamImageComponent() {
   return (
-    <div className="w-full h-auto pb-20 bg-white relative">
+    <div className="w-full h-auto bg-white relative">
       {/* Image */}
       <div className="w-full h-[27rem] lg:h-[40rem] relative z-0">
         <Image
