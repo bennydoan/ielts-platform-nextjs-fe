@@ -197,4 +197,9 @@ Check out the [Next.js deployment documentation](https://nextjs.org/docs/pages/b
 ## 📄 License
 
 Private - All rights reserved
+<<<<<<< HEAD
 c
+=======
+ssss
+
+> > > > > > > 3b346c3 (test)
