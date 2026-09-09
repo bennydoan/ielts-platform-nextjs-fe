@@ -8,11 +8,13 @@ import TestAnalytic from "./TestAnalytic";
 import CardCTA from "../CallToActionSlider/CardCTA";
 import TeamImageComponent from "../CourseRegistration/TeamImageComponent";
 import dynamic from "next/dynamic";
+import { getLatestSubmission } from "@/libs/submission";
 const TestList = dynamic(() => import("../Course/TestList"), { ssr: false }); // only render in client side not server side
 
 function TestResult() {
   const [timeTaken, setTimeTaken] = useState<string | null>(null);
   const [answers, setAnswer] = useState<Record<number, string> | null>(null);
+  const [date, setDate] = useState<string | null>(null);
 
   const router = useRouter();
   const { TestID, category } = router.query;
@@ -29,13 +31,14 @@ function TestResult() {
 
   useEffect(() => {
     if (!foundTest) return;
-    const raw = sessionStorage.getItem("testSubmission");
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      setAnswer(parsed.answers);
-      setTimeTaken(parsed.timeTaken);
-    }
-  }, [foundTest]);
+    getLatestSubmission(String(TestID)).then((s) => {
+      if (s) {
+        setAnswer(s.answers as Record<number, string>);
+        setTimeTaken(s.timeTaken);
+        setDate(s.date);
+      }
+    });
+  }, [foundTest, TestID]);
 
   if (!router.isReady || !foundTest) return null; // avoid flashing content while redirecting
 
@@ -55,7 +58,11 @@ function TestResult() {
     <div className="bg-[#f0f0f0] py-20 px-6">
       <div className="bg-white w-full h-auto flex flex-col py-10 px-20 gap-15">
         {/* test score and time report  */}
-        <TestScoreBox timeTaken={timeTaken} correctAnswer={correctCount} />
+        <TestScoreBox
+          timeTaken={timeTaken}
+          correctAnswer={correctCount}
+          date={date}
+        />
         {/* Answer key: */}
         {answers && <AnswerKey test={foundTest} Answers={answers} />}
         {/* button */}

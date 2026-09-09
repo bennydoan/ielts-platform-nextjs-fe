@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { listeningTests } from "@/data/ListeningTest/ListeningTests";
 import { useState, useRef } from "react";
 import { ListeningTest } from "@/data/ListeningTest/Listening";
+import { saveSubmission } from "@/libs/submission";
 
 function TestMode() {
   const router = useRouter();
@@ -30,7 +31,7 @@ function TestMode() {
     );
   }
 
-  function handleSubmitTest() {
+  async function handleSubmitTest() {
     setIsSubmitted(true);
 
     const allQuestionIds = getAllQuestionIds(test); // get all the ids
@@ -45,10 +46,14 @@ function TestMode() {
     const seconds = timeTakenSeconds % 60;
     const timeTaken = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
-    sessionStorage.setItem(
-      "testSubmission",
-      JSON.stringify({ answers: completeAnswers, timeTaken }),
-    );
+    await saveSubmission({
+      id: String(Date.now()),
+      testId: String(TestID),
+      userId: "guest",
+      answers: completeAnswers,
+      timeTaken,
+      date: new Date().toISOString(),
+    });
     router.push(`/ielts-tests/${category}/result/${TestID}`);
   }
   return (

@@ -4,9 +4,10 @@ import { calculatingBandScore } from "@/utils";
 type Props = {
   timeTaken: string | null;
   correctAnswer: number;
+  date: string | null;
 };
 
-function TestScoreBox({ timeTaken, correctAnswer }: Props) {
+function TestScoreBox({ timeTaken, correctAnswer, date }: Props) {
   return (
     <div className=" flex flex-col items-center justify-center py-5 gap-6">
       <div className="flex items-center gap-5">
@@ -34,6 +35,14 @@ function TestScoreBox({ timeTaken, correctAnswer }: Props) {
           <FaRegClock className="text-black text-xs" />
           <span className="text-black text-xs font-medium">{timeTaken}</span>
         </div>
+        {date && (
+          <div className="inline-flex items-center gap-2 border border-gray-300 rounded-full px-3 py-1 mt-3 ml-2">
+            <span className="text-black text-xs">Date:</span>
+            <span className="text-black text-xs font-medium">
+              {new Date(date).toLocaleDateString()}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
