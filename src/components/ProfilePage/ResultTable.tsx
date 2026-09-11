@@ -1,26 +1,28 @@
 import Pagination from "../Blogs/Pagination";
-import { testResult } from "@/data/TestResult";
 import { courseDatas } from "@/data/Course";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { calculatingBandScore } from "@/utils";
+import { type Submission } from "@/libs/submission";
 
 type Props = {
   filterTest: string;
+  submissions: Submission[];
 };
 
-function ResultTable({ filterTest }: Props) {
+function ResultTable({ filterTest, submissions }: Props) {
   const router = useRouter();
+
   const [currentPage, setCurrenPage] = useState(1);
   const items_per_page = 5;
-
   //this one will return an array
-  const filteredResult = testResult.filter((test) => {
-    if (!filterTest || filterTest === "Default") return true; // keep everything
-    //we want to get the course
-    const course = courseDatas.find((data) => data.id === test.courseId); // we only want one so we use find
-    return course?.category === filterTest;
+
+  const filteredResult = submissions.filter((s) => {
+    if (!filterTest || filterTest === "Default") return true;
+    const test = courseDatas.find((data) => String(data.id) === s.testId);
+    return test?.category === filterTest;
   });
+
   const totalPages = Math.ceil(filteredResult.length / items_per_page);
 
   const shownResult = filteredResult.slice(
@@ -54,26 +56,30 @@ function ResultTable({ filterTest }: Props) {
         <tbody>
           {shownResult.map((result) => {
             const course = courseDatas.find(
-              (data) => data.id === result.courseId,
+              (test) => String(test.id) === result.testId,
             );
 
             return (
               <tr
-                key={result.resultId}
-                onClick={() => router.push(`/results/${result.resultId}`)}
+                key={result.id}
+                onClick={() =>
+                  router.push(
+                    `/ielts-tests/${course?.category.toLowerCase()}/result/${result.testId}?resultId=${result.id}`,
+                  )
+                }
                 className="cursor-pointer hover:bg-gray-50"
               >
                 <td className="py-5 px-5 border border-gray-300 text-gray-600 text-center">
                   {course ? `${course.category} ${course.title}` : "Unknown"}
                 </td>
                 <td className="py-5 px-5 border border-gray-300 text-gray-600 text-center">
-                  {result.score} / 40
+                  {result.rawScore} / 40
                 </td>
                 <td className="py-5 px-5 border border-gray-300 text-gray-600 text-center">
-                  {calculatingBandScore(result.score)}
+                  {calculatingBandScore(result.rawScore)}
                 </td>
                 <td className="py-5 px-5 border border-gray-300 text-gray-600 text-center">
-                  {result.Duration}
+                  {result.timeTaken}
                 </td>
               </tr>
             );
