@@ -1,11 +1,19 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ResultTable from "./ResultTable";
 import Chart from "./Chart";
+import { getSubmissions, type Submission } from "@/libs/submission";
 function ResultAnalysis() {
   const [skillShown, setSkillShown] = useState<string>("");
 
   const [active, setActive] = useState<"all" | "specific">("all");
+
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+
+  // load all submissions once, share them with the table and the chart
+  useEffect(() => {
+    getSubmissions().then(setSubmissions);
+  }, []);
 
   const baseClass =
     "text-gray-400 text-body leading-[21px] px-4 py-2 rounded-md border-2 border-gray-400 cursor-pointer min-h-10";
@@ -51,9 +59,9 @@ function ResultAnalysis() {
         </select>
       </div>
 
-      <ResultTable filterTest={skillShown} />
+      <ResultTable filterTest={skillShown} submissions={submissions} />
 
-      <Chart filterTest={skillShown} />
+      <Chart filterTest={skillShown} submissions={submissions} />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { listeningTests } from "@/data/ListeningTest/ListeningTests";
 import { useState, useRef } from "react";
 import { ListeningTest } from "@/data/ListeningTest/Listening";
 import { saveSubmission } from "@/libs/submission";
+import getBandScore from "@/utils/getBandScore";
 
 function TestMode() {
   const router = useRouter();
@@ -33,7 +34,6 @@ function TestMode() {
 
   async function handleSubmitTest() {
     setIsSubmitted(true);
-
     const allQuestionIds = getAllQuestionIds(test); // get all the ids
     const completeAnswers: Record<number, string | null> = Object.fromEntries(
       allQuestionIds.map((id) => [id, answers[id] || null]),
@@ -46,15 +46,32 @@ function TestMode() {
     const seconds = timeTakenSeconds % 60;
     const timeTaken = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
+    const allQuestions =
+      test?.sections.flatMap((s) => s.groups.flatMap((g) => g.questions)) ?? [];
+
+    const rawScore = allQuestions.filter((q) =>
+      q.correctAnswer
+        .map((a) => a.toLowerCase())
+        .includes((answers[q.id] ?? "").toLowerCase()),
+    ).length;
+
+    const band = getBandScore(rawScore); // import from "@/utils/getBandScore"
+
+    const submissionId = String(Date.now());
+
     await saveSubmission({
-      id: String(Date.now()),
+      id: submissionId,
       testId: String(TestID),
       userId: "guest",
       answers: completeAnswers,
+      rawScore,
+      band,
       timeTaken,
       date: new Date().toISOString(),
     });
-    router.push(`/ielts-tests/${category}/result/${TestID}`);
+    router.push(
+      `/ielts-tests/${category}/result/${TestID}?resultId=${submissionId}`,
+    );
   }
   return (
     <div className=" flex flex-col gap-10">

@@ -15,6 +15,7 @@ function TestResult() {
   const [timeTaken, setTimeTaken] = useState<string | null>(null);
   const [answers, setAnswer] = useState<Record<number, string> | null>(null);
   const [date, setDate] = useState<string | null>(null);
+  const [correctCount, setCorrectCount] = useState<number>(0);
 
   const router = useRouter();
   const { TestID, category } = router.query;
@@ -36,23 +37,12 @@ function TestResult() {
         setAnswer(s.answers as Record<number, string>);
         setTimeTaken(s.timeTaken);
         setDate(s.date);
+        setCorrectCount(s.rawScore);
       }
     });
   }, [foundTest, TestID]);
 
   if (!router.isReady || !foundTest) return null; // avoid flashing content while redirecting
-
-  const allQuestion = foundTest.sections.flatMap((section) =>
-    section.groups.flatMap((group) => group.questions),
-  );
-
-  //checking the correct answer
-
-  const correctCount = allQuestion.filter((q) =>
-    q.correctAnswer
-      .map((a) => a.toLowerCase())
-      .includes((answers?.[q.id] ?? "").toLowerCase()),
-  ).length;
 
   return (
     <div className="bg-[#f0f0f0] py-20 px-6">

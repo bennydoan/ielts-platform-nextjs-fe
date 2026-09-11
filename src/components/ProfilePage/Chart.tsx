@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   LineChart,
   Line,
@@ -8,35 +9,45 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import { testResult } from "@/data/TestResult";
 import { courseDatas } from "@/data/Course";
+import { type Submission } from "@/libs/submission";
 
 type Props = {
   filterTest: string;
+  submissions: Submission[];
 };
-//get data from test result for the line chart
 
-function getChartData(category: string) {
-  return testResult
+//get real submissions for the line chart, oldest to newest, by test category
+
+function getChartData(submissions: Submission[], category: string) {
+  return submissions
     .filter((result) => {
-      const course = courseDatas.find((c) => c.id === result.courseId);
+      const course = courseDatas.find((c) => String(c.id) === result.testId);
       return course?.category === category; // check if the category matched
     })
+    .slice()
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) // get the latest first
     .map((result) => ({
-      date: result.testDate,
-      scorePercentage: Math.round((result.score / 40) * 100 * 100) / 100,
+      date: new Date(result.date).toLocaleDateString(),
+      Score: result.rawScore,
     }));
 }
 
-const readingData = getChartData("Reading");
-const listeningData = getChartData("Listening");
-
-function Chart({ filterTest }: Props) {
+function Chart({ filterTest, submissions }: Props) {
   const showAll = !filterTest;
+
+  const readingData = useMemo(
+    () => getChartData(submissions, "Reading"), // we need the reading data during the render not after so we dont use the useEffect
+    [submissions],
+  );
+  const listeningData = useMemo(
+    () => getChartData(submissions, "Listening"),
+    [submissions],
+  );
 
   return (
     <div className="flex flex-col gap-8">
-      {(showAll || filterTest === "Reading") && (
+      {(showAll || filterTest === "Reading") && readingData.length > 0 && (
         <div>
           <h2 className="text-black font-bold mb-2">Reading</h2>
           <ResponsiveContainer width="100%" height={300}>
@@ -47,7 +58,7 @@ function Chart({ filterTest }: Props) {
               <Tooltip />
               <Line
                 type="monotone"
-                dataKey="scorePercentage"
+                dataKey="Score"
                 stroke="#F5222D"
                 strokeWidth={2}
               />
@@ -56,7 +67,7 @@ function Chart({ filterTest }: Props) {
         </div>
       )}
 
-      {(showAll || filterTest === "Listening") && (
+      {(showAll || filterTest === "Listening") && listeningData.length > 0 && (
         <div>
           <h2 className="text-black font-bold mb-2">Listening</h2>
           <ResponsiveContainer width="100%" height={300}>
@@ -67,7 +78,7 @@ function Chart({ filterTest }: Props) {
               <Tooltip />
               <Line
                 type="monotone"
-                dataKey="scorePercentage"
+                dataKey="Score"
                 stroke="#1F5E43"
                 strokeWidth={2}
               />

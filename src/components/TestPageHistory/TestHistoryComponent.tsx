@@ -53,7 +53,7 @@ function TestHistoryComponent({ id }: Props) {
       </div>
 
       {/* second div for the history section */}
-      <HistoryComponent />
+      <HistoryComponent id={id} />
 
       {/* third div for the reminder and start test button */}
       <div className="flex flex-col gap-5">
