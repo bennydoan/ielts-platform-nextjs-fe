@@ -2,10 +2,18 @@ import Image from "next/image";
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
 import { useForm } from "react-hook-form";
+import { logIn } from "@/libs/auth";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 type formData = { email: string; password: string };
 
 function LoginForm() {
+  const router = useRouter();
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -13,9 +21,30 @@ function LoginForm() {
     reset,
   } = useForm<formData>();
 
-  function onSubmit(data: formData) {
-    console.log(data);
-    reset();
+  async function onSubmit(data: formData) {
+    setErrorMessage(null);
+    setIsSubmitting(true);
+    try {
+      const result = await logIn({
+        email: data.email,
+        password: data.password,
+      });
+      localStorage.setItem("token", result.token);
+      localStorage.setItem("role", result.role);
+      reset();
+      if (result.role === "Admin") {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
+    } catch (err) {
+      console.log(err);
+      setErrorMessage(
+        err instanceof Error ? err.message : "Something went wrong",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -47,6 +76,7 @@ function LoginForm() {
             },
           })}
           type="text"
+          autoComplete="email"
           placeHolder="Tài khoản (Email)"
         />
         {errors.email && <p className="text-red-500">{errors.email.message}</p>}
@@ -62,17 +92,20 @@ function LoginForm() {
             },
           })}
           type="password"
+          autoComplete="current-password"
           placeHolder="Mật khẩu"
         />
         {errors.password && (
           <p className="text-red-500">{errors.password.message}</p>
         )}
 
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+
         <SubmitButton
-          buttonName="Log in account"
+          buttonName={isSubmitting ? "Loggin In..." : "Log In"}
           href="/auth/register"
-          text="Không có tài khoản?"
-          actionLink="Đăng kí"
+          text="Dont have account?"
+          actionLink="Register"
         />
       </form>
     </div>

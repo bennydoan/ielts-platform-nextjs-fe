@@ -1,8 +1,12 @@
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
-
+import { useState } from "react";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { registerUser } from "@/libs/auth";
+import { useRouter } from "next/router";
 
+// this is the form submiited by user
 type registerForm = {
   userName: string;
   email: string;
@@ -11,6 +15,11 @@ type registerForm = {
 };
 
 function RegisterForm() {
+  const router = useRouter();
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -22,10 +31,31 @@ function RegisterForm() {
   //watch the password
   const password = watch("password");
 
-  function onSubmit(data: registerForm) {
-    console.log(data);
-    reset();
+  async function onSubmit(data: registerForm) {
+    // get data from the form
+    setErrorMessage(null);
+    setIsSubmitting(true); // for the button
+    try {
+      const result = await registerUser({
+        email: data.email,
+        password: data.password,
+        fullName: data.userName,
+      });
+
+      console.log("Registered successfully:", result);
+      reset(); //clear back to empty
+      // store result.token somewhere, redirect to a logged-in page
+      router.push("/auth/login");
+      toast.success("Registration successful! Please check your email.");
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error ? err.message : "Something went wrong",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
+
   return (
     <div className="bg-[#f0f0f0] md:w-[504px]  h-auto w-auto p-[32px] rounded-md ">
       <form
@@ -110,11 +140,13 @@ function RegisterForm() {
           <p className="text-red-500">{errors.confirmPassword.message}</p>
         )}
 
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+
         <SubmitButton
-          buttonName="Tạo tài khoản"
+          buttonName={isSubmitting ? "Creating..." : "Create Account"}
           href="/auth/login"
-          text="Đã có tài khoản?"
-          actionLink="Đăng nhập"
+          text="Already have account?"
+          actionLink="Log In"
         />
       </form>
     </div>
