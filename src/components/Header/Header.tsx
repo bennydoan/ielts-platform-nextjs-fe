@@ -79,7 +79,9 @@ function Header() {
         >
           Đăng nhập
         </Link>
+
         {/* this button will be switched after LogIn */}
+
         {/* <div className="flex gap-2 items-center justify-center relative">
           <div className="relative border-2 border-[#F5222D] rounded-full h-[36px] w-[36px] overflow-hidden">
             <Image

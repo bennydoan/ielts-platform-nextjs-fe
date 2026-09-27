@@ -28,7 +28,12 @@ function getChartData(submissions: Submission[], category: string) {
     .slice()
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) // get the latest first
     .map((result) => ({
-      date: new Date(result.date).toLocaleDateString(),
+      date: new Date(result.date).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }),
+
       Score: result.rawScore,
     }));
 }
