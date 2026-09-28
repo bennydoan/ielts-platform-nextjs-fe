@@ -18,7 +18,6 @@ export type LogIn = {
 
 export type AuthResponse = {
   // should exactly mathc the back end data
-  token: string;
   email: string;
   fullName: string;
   role: string;
@@ -49,6 +48,7 @@ export async function logIn(data: LogIn): Promise<AuthResponse> {
     headers: {
       "Content-Type": "application/json", // tell data we are sending is Json
     },
+    credentials: "include", // tells the browser to include cookies when making the request
     body: JSON.stringify(data), // use the data. convert the JavaScript object into a JSON string {"email":"john@gmail.com","password":"123456"}
   });
   if (!response.ok) {
@@ -59,8 +59,16 @@ export async function logIn(data: LogIn): Promise<AuthResponse> {
   return response.json();
 }
 
-//confirm Email
+// get the user info, browser can read thhe httponly which has token
+export async function getMe(): Promise<AuthResponse> {
+  const response = await fetch(`${API_URL}/api/auth/me`, {
+    credentials: "include", // will send the request with HTTP only
+  });
+  if (!response.ok) throw new Error("Not logged in");
+  return response.json();
+}
 
+//confirm Email
 export async function confirmEmail(
   email: string,
   token: string,
@@ -76,4 +84,13 @@ export async function confirmEmail(
   }
   return response.json();
 }
-//promise will return a ConfirmEmailResponse
+
+export async function logOut(): Promise<void> {
+  const response = await fetch(`${API_URL}/api/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Logout failed");
+  }
+}

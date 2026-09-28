@@ -1,4 +1,17 @@
+import { useAuth } from "@/context/AuthContext";
+import { useState, useEffect } from "react";
+
 function UserProfileComponent() {
+  const { fullName, email } = useAuth();
+
+  const [name, setName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    if (fullName) setName(fullName);
+    if (email) setUserEmail(email);
+  }, [fullName, email]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // form submission logic goes here later
@@ -21,6 +34,8 @@ function UserProfileComponent() {
               type="text"
               placeholder="Tên hiển thị của bạn"
               className="border border-gray-300 rounded-md px-3 py-2 text-black focus:outline-none focus:border-[#F5222D]"
+              value={name}
+              readOnly
             />
           </div>
 
@@ -58,6 +73,20 @@ function UserProfileComponent() {
               id="email"
               type="email"
               placeholder="Nhập địa chỉ email"
+              className="border border-gray-300 rounded-md px-3 py-2 text-black focus:outline-none focus:border-[#F5222D]"
+              value={userEmail}
+              readOnly
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="oldPassword" className="text-black font-semibold">
+              Mật khẩu cũ
+            </label>
+            <input
+              id="oldPassword"
+              type="password"
+              placeholder="Nhập địa mật khẩu cũ"
               className="border border-gray-300 rounded-md px-3 py-2 text-black focus:outline-none focus:border-[#F5222D]"
             />
           </div>

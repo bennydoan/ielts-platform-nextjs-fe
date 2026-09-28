@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { logIn } from "@/libs/auth";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { useAuth } from "@/context/AuthContext";
 
 type formData = { email: string; password: string };
 
@@ -13,6 +14,8 @@ function LoginForm() {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { login } = useAuth();
 
   const {
     register,
@@ -29,8 +32,7 @@ function LoginForm() {
         email: data.email,
         password: data.password,
       });
-      localStorage.setItem("token", result.token);
-      localStorage.setItem("role", result.role);
+      login(result.fullName, result.role, result.email);
       reset();
       if (result.role === "Admin") {
         router.push("/admin");

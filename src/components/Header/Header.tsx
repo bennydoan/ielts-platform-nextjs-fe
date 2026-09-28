@@ -2,8 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
-// import { PiSignOut } from "react-icons/pi";
-
+import { PiSignOut } from "react-icons/pi";
+import { useAuth } from "@/context/AuthContext";
 import { useState, useEffect } from "react";
 
 function Header() {
@@ -14,6 +14,7 @@ function Header() {
   function handleClick() {
     setIsClicked(!isClicked);
   }
+  const { isLoggedIn, fullName, email, logout } = useAuth();
 
   // handle the menu when the size is back from lg ->medium
 
@@ -73,50 +74,54 @@ function Header() {
           Đăng ký <br /> học trực tiếp
         </Link>
 
-        <Link
-          href="/auth/login"
-          className={`bg-[#F5222D] text-white text-body leading-[21px] px-6 py-2 rounded-md  hover:opacity-80 cursor-pointer min-h-10`}
-        >
-          Đăng nhập
-        </Link>
-
-        {/* this button will be switched after LogIn */}
-
-        {/* <div className="flex gap-2 items-center justify-center relative">
-          <div className="relative border-2 border-[#F5222D] rounded-full h-[36px] w-[36px] overflow-hidden">
-            <Image
-              src="/images/NhanVanLogo.svg"
-              fill
-              alt="NhanVanLogo"
-              className="object-cover"
-            />
-          </div>
-          <div
-            className="block cursor-pointer"
-            onClick={() => setDropdownOpen(!dropdownOpen)}
+        {!isLoggedIn ? (
+          <Link
+            href="/auth/login"
+            className={`bg-[#F5222D] text-white text-body leading-[21px] px-6 py-2 rounded-md  hover:opacity-80 cursor-pointer min-h-10`}
           >
-            <p className="text-black font-bold text-sm">Dinh Tuan Doan</p>
-            <p className="text-gray-500 text-sm">bennydoan1111@gmail.com</p>
-          </div>
-
-          {dropdownOpen && (
-            <div className="border rounded-md bg-white absolute top-13 left-2 w-full h-auto py-2">
-              <ul className="flex flex-col gap-2">
-                <li className="w-full hover:bg-gray-200 cursor-pointer h-[40px] flex items-center p-4">
-                  <Link href="/profile" className="text-black">
-                    Hồ sơ
-                  </Link>
-                </li>
-
-                <li className="w-full hover:bg-[#F5222D]/30 cursor-pointer h-[40px] flex items-center p-4">
-                  <button className="text-[#F5222D] cursor-pointer">
-                    Đăng xuất
-                  </button>
-                </li>
-              </ul>
+            Đăng nhập
+          </Link>
+        ) : (
+          <div className="flex gap-2 items-center justify-center relative">
+            <div className="relative border-2 border-[#F5222D] rounded-full h-[36px] w-[36px] overflow-hidden">
+              <Image
+                src="/images/NhanVanLogo.svg"
+                fill
+                alt="NhanVanLogo"
+                className="object-cover"
+              />
             </div>
-          )}
-        </div> */}
+            <div
+              className="block cursor-pointer"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              <p className="text-black font-bold text-sm">{fullName}</p>
+              <p className="text-gray-500 text-sm">{email}</p>
+            </div>
+
+            {dropdownOpen && (
+              <div className="border rounded-md bg-white absolute top-13 left-2 w-full h-auto py-2">
+                <ul className="flex flex-col gap-2">
+                  <li className="w-full hover:bg-gray-200 cursor-pointer h-[40px] flex items-center p-4">
+                    <Link href="/profile" className="text-black">
+                      Hồ sơ
+                    </Link>
+                  </li>
+
+                  <li className="w-full hover:bg-[#F5222D]/30 cursor-pointer h-[40px] flex items-center p-4">
+                    <Link
+                      href="/"
+                      onClick={logout}
+                      className="text-[#F5222D] cursor-pointer"
+                    >
+                      Đăng xuất
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Mobile Screen */}
@@ -175,8 +180,8 @@ function Header() {
               className="block cursor-pointer"
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
-              <p className="text-black font-bold text-sm">Dinh Tuan Doan</p>
-              <p className="text-gray-500 text-sm">bennydoan1111@gmail.com</p>
+              <p className="text-black font-bold text-sm">{fullName}</p>
+              <p className="text-gray-500 text-sm">{email}</p>
             </div>
           </Link>
 
@@ -210,24 +215,28 @@ function Header() {
             >
               Join Our Offline Course
             </Link>
-            <Link
-              className={` bg-[#F5222D] text-white w-full text-center py-2 rounded-md font-medium`}
-              href="/auth/login"
-              onClick={() => setIsClicked(false)}
-            >
-              Sign In
-            </Link>
 
-            {/* Sign out
-            <button
-              className="bg-[#F5222D] text-white w-full text-center py-2 rounded-md font-medium flex items-center justify-center gap-2"
-              onClick={() => {
-                setIsClicked(false);
-              }}
-            >
-              <PiSignOut />
-              Sign Out
-            </button> */}
+            {!isLoggedIn ? (
+              <Link
+                className={` bg-[#F5222D] text-white w-full text-center py-2 rounded-md font-medium`}
+                href="/auth/login"
+                onClick={() => setIsClicked(false)}
+              >
+                Sign In
+              </Link>
+            ) : (
+              <Link
+                href="/"
+                className="bg-[#F5222D] text-white w-full text-center py-2 rounded-md font-medium flex items-center justify-center gap-2"
+                onClick={() => {
+                  setIsClicked(false);
+                  logout();
+                }}
+              >
+                <PiSignOut />
+                Sign Out
+              </Link>
+            )}
           </div>
         </div>
       </div>
