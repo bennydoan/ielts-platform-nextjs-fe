@@ -8,16 +8,8 @@ function AdminPage() {
   const [isAllowed, setIsAllowed] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log(token);
-
-    if (!token) {
-      router.replace("/auth/login");
-      return;
-    }
-
     fetch(`${API_URL}/api/admin/homePage`, {
-      headers: { Authorization: `Bearer ${token}` },
+      credentials: "include",
     }).then((res) => {
       if (res.status === 401) {
         router.replace("/auth/login");
