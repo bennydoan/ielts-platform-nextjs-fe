@@ -40,7 +40,6 @@ function LoginForm() {
         router.push("/");
       }
     } catch (err) {
-      console.log(err);
       setErrorMessage(
         err instanceof Error ? err.message : "Something went wrong",
       );
@@ -86,17 +85,12 @@ function LoginForm() {
         <Input
           {...register("password", {
             required: "Password can not be blank",
-            pattern: {
-              value:
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-              message:
-                "Password must be at least 8 characters and contain uppercase, lowercase, number, and special character",
-            },
           })}
           type="password"
           autoComplete="current-password"
           placeHolder="Mật khẩu"
         />
+
         {errors.password && (
           <p className="text-red-500">{errors.password.message}</p>
         )}
