@@ -3,6 +3,8 @@ import { RiAccountCircleLine } from "react-icons/ri";
 import { IoAnalyticsOutline } from "react-icons/io5";
 import { IoLogOutOutline } from "react-icons/io5";
 import { useState, useRef } from "react";
+import { useAuth } from "@/context/AuthContext";
+import Link from "next/link";
 
 type Props = {
   active: string;
@@ -10,6 +12,7 @@ type Props = {
 };
 
 function Navigation({ active, setActive }: Props) {
+  const { logout } = useAuth();
   //refer to the submitted fike
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -79,10 +82,14 @@ function Navigation({ active, setActive }: Props) {
             Phân tích kết quả thi
           </button>
         </nav>
-        <button className="px-2 cursor-pointer flex items-center justify-center gap-2 text-white bg-[#F5222D] rounded-lg  py-2 w-[100%]">
+        <Link
+          href="/"
+          onClick={logout}
+          className="px-2 cursor-pointer flex items-center justify-center gap-2 text-white bg-[#F5222D] rounded-lg py-2 w-[100%]"
+        >
           <IoLogOutOutline />
           <span>Đăng xuất</span>
-        </button>
+        </Link>
       </div>
     </div>
   );
