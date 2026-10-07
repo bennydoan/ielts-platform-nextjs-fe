@@ -5,6 +5,7 @@ export type Profile = {
   fullName: string;
   phoneNumber: string | null;
   dateOfBirth: string | null; // "YYYY-MM-DD"};
+  avatarUrl: string | null;
 };
 
 export type UpdateProfile = {
@@ -50,6 +51,21 @@ export async function changePassword(data: UpdatePassword) {
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(errorText || "Change password failed");
+  }
+  return response.json();
+}
+
+export async function uploadAvatar(file: File): Promise<{ avatarUrl: string }> {
+  const formData = new FormData();
+  formData.append("file", file); // "file" must match the C# parameter name
+  const response = await fetch(`${API_URL}/api/Profile/UploadAvatar`, {
+    method: "POST",
+    credentials: "include",
+    body: formData, //   the browser sets it for files
+  });
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || "Upload failed");
   }
   return response.json();
 }

@@ -6,15 +6,19 @@ import { PiSignOut } from "react-icons/pi";
 import { useAuth } from "@/context/AuthContext";
 import { useState, useEffect } from "react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 function Header() {
   // State for button clicking
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false); // profile
 
+  //avatar
+
   function handleClick() {
     setIsClicked(!isClicked);
   }
-  const { isLoggedIn, fullName, email, logout } = useAuth();
+  const { isLoggedIn, fullName, email, logout, avatarUrl } = useAuth();
 
   // handle the menu when the size is back from lg ->medium
 
@@ -85,10 +89,15 @@ function Header() {
           <div className="flex gap-2 items-center justify-center relative">
             <div className="relative border-2 border-[#F5222D] rounded-full h-[36px] w-[36px] overflow-hidden">
               <Image
-                src="/images/NhanVanLogo.svg"
+                src={
+                  avatarUrl
+                    ? `${API_URL}${avatarUrl}`
+                    : "/images/NhanVanLogo.svg"
+                }
                 fill
-                alt="NhanVanLogo"
+                alt="Avatar"
                 className="object-cover"
+                unoptimized
               />
             </div>
             <div

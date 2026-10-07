@@ -6,6 +6,7 @@ import {
   ReactNode,
 } from "react";
 import { getMe, logOut as logOutApi } from "@/libs/auth";
+import { getProfile } from "@/libs/profile";
 
 type AuthState = {
   isLoggedIn: boolean;
@@ -13,6 +14,8 @@ type AuthState = {
   fullName: string | null;
   role: string | null;
   isLoading: boolean;
+  avatarUrl: string | null;
+  setAvatarUrl: (url: string | null) => void;
   login: (fullName: string, role: string, email: string) => void;
   logout: () => Promise<void>;
 };
@@ -23,6 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [fullName, setFullName] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   const [role, setRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,6 +45,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => setIsLoading(false));
   }, []);
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setAvatarUrl(null);
+      return;
+    }
+    getProfile()
+      .then((p) => setAvatarUrl(p.avatarUrl))
+      .catch(() => setAvatarUrl(null)); // if fail
+  }, [isLoggedIn]);
+
   function login(fullName: string, role: string, email: string) {
     setIsLoggedIn(true);
     setFullName(fullName);
@@ -58,7 +72,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, fullName, role, isLoading, login, email, logout }}
+      value={{
+        isLoggedIn,
+        fullName,
+        role,
+        isLoading,
+        login,
+        email,
+        logout,
+        avatarUrl,
+        setAvatarUrl,
+      }}
     >
       {children}
     </AuthContext.Provider>
