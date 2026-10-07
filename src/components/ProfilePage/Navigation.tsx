@@ -2,7 +2,10 @@ import Image from "next/image";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { IoAnalyticsOutline } from "react-icons/io5";
 import { IoLogOutOutline } from "react-icons/io5";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { getProfile, uploadAvatar } from "@/libs/profile";
+import { toast } from "sonner";
+
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 
@@ -10,19 +13,49 @@ type Props = {
   active: string;
   setActive: (showInfo: "profile" | "analysis") => void;
 };
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 function Navigation({ active, setActive }: Props) {
-  const { logout } = useAuth();
+  const { logout, setAvatarUrl } = useAuth();
   //refer to the submitted fike
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   //set avatar url
-  const [imgUrl, setImgUrl] = useState<string | null>(null);
+  const [imgUrl, setImgUrl] = useState<string | null>(
+    "/images/ProfilePage/defaultAvatar.svg",
+  );
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    getProfile()
+      .then((p) => {
+        if (p.avatarUrl) setImgUrl(`${API_URL}${p.avatarUrl}`);
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]; // because files list looks like and array
 
-    if (file) setImgUrl(URL.createObjectURL(file)); // we want to get the img url instead of the Image itself
+    if (!file) return;
+    // quick check on the frontend (backend checks again)
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Ảnh phải nhỏ hơn 2MB");
+      return;
+    }
+    const oldUrl = imgUrl;
+    setImgUrl(URL.createObjectURL(file)); // show preview immediately
+
+    try {
+      const result = await uploadAvatar(file);
+      setImgUrl(`${API_URL}${result.avatarUrl}`);
+      setAvatarUrl(result.avatarUrl); //  tells the whole app, so the Header re-renders
+      toast.success("Cập nhật ảnh đại diện thành công");
+    } catch (err) {
+      setImgUrl(oldUrl); // upload failed, go back to the old image
+      toast.error(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      e.target.value = "";
+    }
   };
 
   const baseClass =
@@ -41,12 +74,7 @@ function Navigation({ active, setActive }: Props) {
             className="w-[150px] h-[150px] rounded-full object-cover"
           />
         ) : (
-          <Image
-            src="/images/ProfilePage/defaultAvatar.svg"
-            alt="avatar"
-            height={150}
-            width={150}
-          />
+          <Image src={`${imgUrl}`} alt="avatar" height={150} width={150} />
         )}
         <button
           onClick={() => fileInputRef.current?.click()} // current refers to the whole input blog
