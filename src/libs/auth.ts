@@ -94,3 +94,18 @@ export async function logOut(): Promise<void> {
     throw new Error("Logout failed");
   }
 }
+
+export async function googleLogin(idToken: string) {
+  const response = await fetch(`${API_URL}/api/auth/google`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+
+    body: JSON.stringify({ idToken }), // token from GG
+  });
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || "Google login failed");
+  }
+  return response.json();
+}
