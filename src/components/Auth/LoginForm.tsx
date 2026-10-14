@@ -54,7 +54,7 @@ function LoginForm() {
         <GoogleLogin
           onSuccess={async (credentialResponse) => {
             try {
-              const result = await googleLogin(credentialResponse.credential!); //// the ID token verified by backend
+              const result = await googleLogin(credentialResponse.credential!); //// credential includes the ID token verified by backend
               login(result.fullName, result.role, result.email);
               router.push("/");
             } catch (err) {

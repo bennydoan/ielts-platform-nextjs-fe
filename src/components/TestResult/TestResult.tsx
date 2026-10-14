@@ -18,7 +18,8 @@ function TestResult() {
   const [correctCount, setCorrectCount] = useState<number>(0);
 
   const router = useRouter();
-  const { TestID, category } = router.query;
+  const { TestID } = router.query;
+  // const { TestID, category } = router.query;
 
   //find the test for the answer
   const foundTest = listeningTests.find((t) => t.courseId === Number(TestID));
@@ -80,9 +81,9 @@ function TestResult() {
               View test page
             </Link>
           </div>
-          <TestList
-            categoryShown={typeof category === "string" ? category : null}
-          />
+
+          {/* add test to filter later */}
+          <TestList />
         </div>
         <div className="flex flex-col gap-5">
           <TeamImageComponent />

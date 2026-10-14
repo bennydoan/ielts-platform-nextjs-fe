@@ -1,4 +1,3 @@
-"use client";
 import { TestCategory } from "@/data/Course";
 
 type Props = {

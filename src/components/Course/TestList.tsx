@@ -1,21 +1,21 @@
 import Image from "next/image";
-import { courseDatas, ListOfBGColour } from "@/data/Course";
+import { Test } from "@/libs/testBank";
 import { Swiper as SwiperType } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { useRef } from "react";
 import TestCard from "./TestCard";
+import { useAuth } from "@/context/AuthContext";
 
-function TestList({ categoryShown }: { categoryShown: string | null }) {
+const ListOfBGColour = ["#FBD9CF", "#D5EDDB", "#D7EFF2", "#D0DCFA"];
+
+function TestList({ tests = [] }: { tests?: Test[] }) {
+  const { isLoggedIn } = useAuth();
   //reference to the swiper to use in the btn onClick
   const swiperRef = useRef<SwiperType | null>(null);
   // this is the category filter
   // limit to 10
-  const filteredCategory = categoryShown
-    ? courseDatas
-        .filter((course) => course.category === categoryShown)
-        .slice(0, 10)
-    : courseDatas.slice(0, 10);
+  const listOfTest = tests.slice(1, 11);
 
   return (
     <div className="flex flex-row mb-8">
@@ -34,7 +34,13 @@ function TestList({ categoryShown }: { categoryShown: string | null }) {
       </button>
 
       <div className="w-[90%] lg:w-[81%] mx-auto flex items-center flex-row gap-4 overflow-x-hidden overflow-y-hidden">
-        {filteredCategory.length === 0 ? (
+        {!isLoggedIn ? (
+          <div className="flex items-center justify-center w-full h-[177px]">
+            <p className="text-gray-400 text-lg font-medium">
+              Please Log In To See Content
+            </p>
+          </div>
+        ) : listOfTest.length === 0 ? (
           <div className="flex items-center justify-center w-full h-[177px]">
             <p className="text-gray-400 text-lg font-medium">Coming Soon</p>
           </div>
@@ -47,13 +53,13 @@ function TestList({ categoryShown }: { categoryShown: string | null }) {
             spaceBetween={14}
             className="!ml-0"
           >
-            {filteredCategory.map((course, index) => (
-              <SwiperSlide key={course.id} style={{ width: "280px" }}>
+            {listOfTest.map((test, index) => (
+              <SwiperSlide key={test.id} style={{ width: "280px" }}>
                 <TestCard
-                  category={course.category}
-                  testId={String(course.id)}
-                  title={course.title}
-                  durations={course.durations}
+                  category={test.category}
+                  testId={String(test.id)}
+                  title={test.title}
+                  durations={test.durationMinutes}
                   backgroundColor={
                     ListOfBGColour[index % ListOfBGColour.length]
                   }

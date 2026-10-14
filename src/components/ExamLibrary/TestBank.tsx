@@ -1,14 +1,24 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { TestCategory, courseDatas } from "@/data/Course";
 import { IoIosArrowRoundForward } from "react-icons/io";
+import { Test, getTest } from "@/libs/testBank";
+
+import { useState, useEffect } from "react";
 
 //only run on client side
 const TestList = dynamic(() => import("../Course/TestList"), { ssr: false });
 
-// get the array of all the test of each category
-
 function TestBank() {
+  // get the array of all the test of each category
+  const [allTests, setAllTests] = useState<Test[]>([]);
+
+  const categories = [...new Set(allTests.map((test) => test.category))]; // using ... new Set remove the duplicates
+  useEffect(() => {
+    getTest()
+      .then(setAllTests)
+      .catch(() => setAllTests([])); // if fails
+  }, []);
+
   return (
     <div className=" bg-white w-[90%] mx-auto flex flex-col gap-9 py-20">
       {/* First Div  */}
@@ -32,8 +42,8 @@ function TestBank() {
 
       <div className="w-[90%] lg:w-[81%] mx-auto flex flex-col gap-4">
         {/* list of tests */}
-        {Object.values(TestCategory).map((cat) => {
-          const arrayOfTest = courseDatas.filter((CD) => CD.category === cat);
+        {categories.map((cat) => {
+          const arrayOfTest = allTests.filter((CD) => CD.category === cat);
 
           return (
             <div key={cat} className="flex flex-col gap-4">
@@ -52,7 +62,7 @@ function TestBank() {
                 )}
               </div>
 
-              <TestList categoryShown={cat} />
+              <TestList tests={arrayOfTest} />
             </div>
           );
         })}

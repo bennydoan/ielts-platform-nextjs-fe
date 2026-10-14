@@ -1,10 +1,15 @@
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
+
 function GreetingComponent() {
+  //get the name
+  const { fullName } = useAuth();
+
   return (
     <div className="bg-[#FFEFF0] w-full md:h-[280px] lg:h-[350px] rounded-lg flex items-center py-5 md:py-15 gap-15 md:gap-[170px] xl:gap-[500px] ">
       <div className="flex flex-col gap-2 ml-1 pl-8 w-[70%] sm:w-[50%] xl:w-[40%] md:ml-16">
         <h1 className="text-black font-bold text-2xl lg:text-5xl">
-          Chào bạn, Dinh Tuan Doan
+          Chào bạn, {fullName}
         </h1>
         <p className="text-gray-500 text-base  lg:text-xl xl:text-2xl sm:w-[83%] md:w-[85%] lg:w-[88%]">
           Cùng bắt đầu hành trình luyện thi IELTS hiệu quả với kho đề thi mô

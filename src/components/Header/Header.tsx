@@ -63,7 +63,7 @@ function Header() {
         <li>
           <Link
             className={`font-semibold hover:text-[#F5222D] md:text-base lg:text-lg text-black`}
-            href="/Blogs"
+            href="/blogs"
           >
             Blogs
           </Link>
