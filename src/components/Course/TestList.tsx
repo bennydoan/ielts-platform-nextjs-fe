@@ -6,8 +6,7 @@ import "swiper/css";
 import { useRef } from "react";
 import TestCard from "./TestCard";
 import { useAuth } from "@/context/AuthContext";
-
-const ListOfBGColour = ["#FBD9CF", "#D5EDDB", "#D7EFF2", "#D0DCFA"];
+import { ListOfBGColour } from "@/constants/cardBGColor";
 
 function TestList({ tests = [] }: { tests?: Test[] }) {
   const { isLoggedIn } = useAuth();

@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { courseDatas, ListOfBGColour } from "@/data/Course";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useRouter } from "next/router";
 import TestCard from "../Course/TestCard";
 import Pagination from "../Blogs/Pagination";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getTest, Test } from "@/libs/testBank";
+import { ListOfBGColour } from "@/constants/cardBGColor";
 
 // typeof TestCategory
 // ↓
@@ -25,11 +26,21 @@ type Props = {
 function WholeTestBank({ header }: Props) {
   const router = useRouter();
 
+  const [allTests, setAllTests] = useState<Test[]>([]);
+
+  useEffect(() => {
+    getTest()
+      .then(setAllTests)
+      .catch(() => setAllTests([])); // if fails
+  }, []);
+
   //filter category
 
-  const filteredCat = courseDatas.filter((cat) => {
-    return cat.category === header;
-  });
+  const filteredCat = allTests
+    .filter((cat) => {
+      return cat.category === header;
+    })
+    .sort((a, b) => a.id - b.id); // smallest id first
 
   const items_per_page = 12;
   const totalPages = Math.ceil(filteredCat.length / items_per_page);
@@ -78,7 +89,7 @@ function WholeTestBank({ header }: Props) {
                 testId={String(cat.id)}
                 category={cat.category}
                 title={cat.title}
-                durations={cat.durations}
+                durations={cat.durationMinutes}
                 backgroundColor={ListOfBGColour[index % ListOfBGColour.length]}
               />
             );
