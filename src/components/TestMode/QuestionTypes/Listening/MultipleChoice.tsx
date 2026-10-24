@@ -1,21 +1,21 @@
-import { QuestionGroup } from "@/data/ListeningTest/Listening";
 import Image from "next/image";
-
+import { QuestionGroup } from "@/libs/testBank";
 type Props = {
   group: QuestionGroup;
-  answers: Record<number, string>;
-  setAnswer: (questionId: number, value: string) => void;
+  // answers: Record<number, string>;
+  // setAnswer: (questionId: number, value: string) => void;
 };
 
-function MultipleChoice({ group, answers, setAnswer }: Props) {
+function MultipleChoice({ group }: Props) {
+  //, answers, setAnswer
   return (
     <div className="flex items-start gap-6">
       <div className="flex flex-col gap-4">
         {group.questions.map((question) => (
-          <div key={question.id}>
+          <div key={question.questionNumber}>
             <p className="text-[#F5222D] font-bold">
               <span className="text-[#F5222D] font-normal">
-                {question.id}.{" "}
+                {question.questionNumber}.{" "}
               </span>
               {question.prompt}
             </p>
@@ -27,12 +27,12 @@ function MultipleChoice({ group, answers, setAnswer }: Props) {
                 >
                   <input
                     type="radio"
-                    name={`q-${question.id}`}
+                    name={`q-${question.questionNumber}`}
                     value={option}
-                    checked={answers[question.id] === option}
-                    onChange={() => {
-                      setAnswer(question.id, option);
-                    }}
+                    // checked={answers[question.questionNumber] === option}
+                    // onChange={() => {
+                    //   setAnswer(question.questionNumber, option);
+                    // }}
                   />
                   {String.fromCharCode(65 + i)}. {option}
                 </label>

@@ -1,13 +1,13 @@
-import { QuestionGroup } from "@/data/ListeningTest/Listening";
+import { QuestionGroup } from "@/libs/testBank";
 type Props = {
   group: QuestionGroup;
-  answers: Record<number, string>;
-  setAnswer: (questionId: number, value: string) => void;
+  //   answers: Record<number, string>;
+  //   setAnswer: (questionId: number, value: string) => void;
 };
-function DragNDrop({ group, answers, setAnswer }: Props) {
-  const handleDrop = (questionId: number, word: string) => {
-    setAnswer(questionId, word);
-  };
+function DragNDrop({ group }: Props) {
+  // const handleDrop = (questionId: number, word: string) => {
+  //   setAnswer(questionId, word);
+  // };
 
   return (
     <div className="flex flex-col gap-4">
@@ -34,15 +34,15 @@ function DragNDrop({ group, answers, setAnswer }: Props) {
               key={index}
               className="inline-block min-w-[80px] border border-dashed border-gray-400 rounded-md px-3 py-1 mx-1 text-center bg-gray-50"
               onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => {
-                const word = e.dataTransfer.getData("text/plain"); // get the data from the onDragStart
-                if (part.questionId !== undefined)
-                  handleDrop(part.questionId, word);
-              }}
+              // onDrop={(e) => {
+              //   const word = e.dataTransfer.getData("text/plain"); // get the data from the onDragStart
+              //   if (part.questionNumber !== undefined)
+              //     handleDrop(part.questionId, word);
+              // }}
             >
-              {part.questionId !== undefined
+              {/* {part.questionId !== undefined
                 ? (answers[part.questionId] ?? part.questionId)
-                : ""}
+                : ""} */}
             </span>
           ),
         )}

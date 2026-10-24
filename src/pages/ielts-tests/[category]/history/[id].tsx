@@ -1,9 +1,10 @@
 import { TestHistoryPage } from "@/components";
-import { courseDatas } from "@/data/Course";
+import { getTestById } from "@/libs/testBank";
 import { GetServerSideProps } from "next";
-
+import { Test } from "@/libs/testBank";
 type Props = {
   id: string;
+  test: Test;
 };
 
 // always render the sever to get the id
@@ -13,30 +14,34 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 ) => {
   const { category, id } = context.params as { category: string; id: string };
 
-  //check if no test Id found => 404
-  const testValidation = courseDatas.find((data) => {
-    return String(data.id) === id;
-  });
-
-  if (!testValidation) {
+  let test: Test | null;
+  try {
+    test = await getTestById(id);
+  } catch (error) {
+    console.error("API call failed:", error);
+    return { notFound: true };
+  }
+  // test doesn't exist → 404
+  if (!test) {
+    console.log("Test not found:", id);
     return { notFound: true };
   }
 
-  //check if the category is found => 404
-
-  if (testValidation.category.toLowerCase() !== category.toLowerCase()) {
+  // wrong category in the URL → 404
+  if (test.category.toLowerCase() !== category.toLowerCase()) {
+    console.log("Wrong category:", test.category, "vs", category);
     return { notFound: true };
   }
 
   return {
-    props: { id },
+    props: { id, test },
   };
 };
 
-export default function IeltsTestDetailPage({ id }: Props) {
+export default function IeltsTestDetailPage({ test }: Props) {
   return (
     <div className="flex flex-col pt-[20px] pb-[40px] bg-white lg:px-6 w-full">
-      <TestHistoryPage testId={id as string} />
+      <TestHistoryPage testById={test} />
     </div>
   );
 }

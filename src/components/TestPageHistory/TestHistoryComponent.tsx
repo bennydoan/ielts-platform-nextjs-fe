@@ -5,18 +5,13 @@ import { FaBell } from "react-icons/fa";
 import TimeSetUp from "./TimeSetUp";
 import { useState } from "react";
 import HistoryComponent from "./HistoryComponent";
-import { courseDatas } from "@/data/Course";
+import { Test } from "@/libs/testBank";
 
 type Props = {
-  id?: string;
+  test: Test;
 };
 
-function TestHistoryComponent({ id }: Props) {
-  // get the data
-  const filteredData = courseDatas.filter((data) => {
-    return data.id === Number(id);
-  });
-
+function TestHistoryComponent({ test }: Props) {
   const [showSetUp, setShowSetUp] = useState(false);
 
   const router = useRouter();
@@ -30,13 +25,11 @@ function TestHistoryComponent({ id }: Props) {
         >
           <IoIosArrowRoundBack /> Back
         </button>
-        <p className="text-black font-bold text-xl md:text-3xl">
-          {filteredData[0].category} {filteredData[0].title}
-        </p>
+        <p className="text-black font-bold text-xl md:text-3xl">{test.title}</p>
         <p className="block text-gray-400 ">
           Bài kiểm tra mô phỏng theo chuẩn IELTS, gồm 4 phần, kéo dài{" "}
-          {filteredData[0].durations} phút. Kết quả chấm điểm tự động ngay sau
-          khi hoàn thành.
+          {test.durationMinutes} phút. Kết quả chấm điểm tự động ngay sau khi
+          hoàn thành.
         </p>
 
         <div className="flex gap-1">
@@ -47,13 +40,13 @@ function TestHistoryComponent({ id }: Props) {
             height={20}
           />
           <p className="text-black">
-            {filteredData[0].durations} mins taken (recommned)
+            {test.durationMinutes} mins taken (recommned)
           </p>
         </div>
       </div>
 
       {/* second div for the history section */}
-      <HistoryComponent id={id} />
+      <HistoryComponent id={test.id} />
 
       {/* third div for the reminder and start test button */}
       <div className="flex flex-col gap-5">
@@ -76,9 +69,9 @@ function TestHistoryComponent({ id }: Props) {
       </div>
       {showSetUp && (
         <TimeSetUp
-          defaultTime={filteredData[0].durations}
-          category={filteredData[0].category}
-          testId={filteredData[0].id}
+          defaultTime={test.durationMinutes}
+          category={test.category}
+          testId={test.id}
           onClose={() => setShowSetUp(false)}
         />
       )}
