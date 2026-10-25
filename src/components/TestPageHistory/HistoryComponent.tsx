@@ -2,14 +2,14 @@ import Image from "next/image";
 import { getSubmissions } from "@/libs/submission";
 import { useState, useEffect } from "react";
 import { Submission } from "@/libs/submission";
-type Props = { id?: string };
+type Props = { id?: number };
 
 function HistoryComponent({ id }: Props) {
   const [subs, setSubs] = useState<Submission[]>([]);
 
   useEffect(() => {
     if (!id) return;
-    getSubmissions(id).then(setSubs);
+    getSubmissions(String(id)).then(setSubs);
   }, [id]);
   return (
     <div className="flex flex-col gap-3">

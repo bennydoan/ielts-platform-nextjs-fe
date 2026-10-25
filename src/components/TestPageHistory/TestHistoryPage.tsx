@@ -1,14 +1,15 @@
 import GreetingComponent from "../ExamLibrary/GreetingComponent";
 import TestHistoryComponent from "./TestHistoryComponent";
+import { Test } from "@/libs/testBank";
 
 type Props = {
-  testId: string;
+  testById: Test;
 };
-function TestHistoryPage({ testId }: Props) {
+function TestHistoryPage({ testById }: Props) {
   return (
     <div className="flex flex-col pt-[20px] pb-[40px] bg-white lg:px-6 w-full">
       <GreetingComponent />
-      <TestHistoryComponent id={testId} />
+      <TestHistoryComponent test={testById} />
     </div>
   );
 }

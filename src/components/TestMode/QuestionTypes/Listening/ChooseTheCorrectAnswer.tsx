@@ -1,26 +1,26 @@
 //Tick the correct Answer
-import { QuestionGroup } from "@/data/ListeningTest/Listening";
 import Image from "next/image";
+import { QuestionGroup } from "@/libs/testBank";
 type Props = {
   group: QuestionGroup;
-  answers: Record<number, string>;
-  setAnswer: (questionId: number, value: string) => void;
+  // answers: Record<number, string>;
+  // setAnswer: (questionId: number, value: string) => void;
 };
-function ChooseTheCorrectAnswer({ group, answers, setAnswer }: Props) {
+function ChooseTheCorrectAnswer({ group }: Props) {
   if (!group.sharedOptions) return null;
 
   return (
     <div className="flex flex-col gap-1">
-      {group.TestContext && (
-        <h1 className="text-black font-bold">{group.TestContext}</h1>
+      {group.context && (
+        <h1 className="text-black font-bold">{group.context}</h1>
       )}
       <div className="flex justify-center gap-2">
         {group.imageUrl && (
           <Image
             src={group.imageUrl}
             alt={group.imageAlt ?? ""}
-            width={400}
-            height={200}
+            width={500}
+            height={300}
           />
         )}
         <table className="w-full border-collapse border-2 border-gray-300">
@@ -40,9 +40,9 @@ function ChooseTheCorrectAnswer({ group, answers, setAnswer }: Props) {
 
           <tbody>
             {group.questions.map((q) => (
-              <tr key={q.id}>
+              <tr key={q.questionNumber}>
                 <td className="px-4 py-2 border-2 border-gray-300 text-black">
-                  <span className="text-[#F5222D]">{q.id}. </span>
+                  <span className="text-[#F5222D]">{q.questionNumber}. </span>
                   {q.prompt}
                 </td>
                 {group.sharedOptions?.map((sharedOption) => (
@@ -52,10 +52,10 @@ function ChooseTheCorrectAnswer({ group, answers, setAnswer }: Props) {
                   >
                     <input
                       type="radio"
-                      name={`q-${q.id}`}
+                      name={`q-${q.questionNumber}`}
                       value={sharedOption}
-                      checked={answers[q.id] === sharedOption}
-                      onChange={() => setAnswer(q.id, sharedOption)}
+                      // checked={answers[q.id] === sharedOption}
+                      // onChange={() => setAnswer(q.id, sharedOption)}
                       className="h-4 w-4"
                     />
                   </td>
