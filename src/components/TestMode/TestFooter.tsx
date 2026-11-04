@@ -5,16 +5,16 @@ type Props = {
   test: TestDetails | null;
   selectedSection: number;
   setSelectedSection: (section: number) => void;
-  // answers: Record<number, string>;
-  // onSubmit: () => void;
+  answers: Record<number, string>;
+  onSubmit: () => void;
 };
 
 function TestFooter({
   test,
   selectedSection,
   setSelectedSection,
-  // answers,
-  // onSubmit,
+  answers,
+  onSubmit,
 }: Props) {
   const clickedStyle =
     " bg-[#FFCCC7] border border-[#f5222d] p-1 rounded-md text-[#f5222d] cursor-pointer";
@@ -22,13 +22,19 @@ function TestFooter({
   const nonClickedStyle =
     " border p-1 rounded-md text-[#bfbfbf] cursor-pointer";
 
-  // function findSectionByQuestionID(questionId: number) {
-  //   return test?.sections.find((section) =>
-  //     section.groups.some((group) =>
-  //       group.questions.some((question) => question.id === questionId),
-  //     ),
-  //   );
-  // }
+  function findSectionByQuestionNumber(questionNumber: number) {
+    return test?.sections.find(
+      (
+        section, // return the section that ..
+      ) =>
+        section.groups.some(
+          (group) =>
+            group.questions.some(
+              (question) => question.questionNumber === questionNumber,
+            ), // return true if at least one element sacrifies the condition
+        ),
+    );
+  }
 
   return (
     <div className="w-full p-5 bg-white border rounded-lg flex flex-col gap-3 ">
@@ -37,7 +43,7 @@ function TestFooter({
         <div className="flex items-center gap-6">
           <button
             type="button"
-            // onClick={onSubmit}
+            onClick={onSubmit}
             className=" border-[#F5222D] bg-[#F5222D] bg px-2 py-1 rounded-md text-white cursor-pointer"
           >
             Submit
@@ -84,31 +90,33 @@ function TestFooter({
       </div>
 
       {/* Question Done Check, question navigation */}
-      {/* <div>
+      <div>
         <div className="flex gap-2">
           {test?.sections.map((section) =>
             section.groups.map((group) =>
               group.questions.map((question) => (
                 <button
-                  key={question.id}
+                  key={question.questionNumber}
                   className={
-                    answers[question.id]
+                    answers[question.questionNumber]
                       ? "border border-[#F5222D] bg-[#F5222D] text-white rounded-sm p-1 cursor-pointer hover:scale-120 transition"
                       : "border text-[#bfbfbf] rounded-sm p-1 cursor-pointer hover:scale-120 transition"
                   }
                   onClick={() => {
-                    const targetSection = findSectionByQuestionID(question.id);
+                    const targetSection = findSectionByQuestionNumber(
+                      question.questionNumber,
+                    );
                     if (targetSection)
                       setSelectedSection(targetSection.sectionNumber);
                   }}
                 >
-                  {question.id}
+                  {question.questionNumber}
                 </button>
               )),
             ),
           )}
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

@@ -1,16 +1,16 @@
 import Image from "next/image";
-import { getSubmissions } from "@/libs/submission";
 import { useState, useEffect } from "react";
-import { Submission } from "@/libs/submission";
+import { SubmissionHistoryType, SubmissionHistory } from "@/libs/submission";
 type Props = { id?: number };
 
 function HistoryComponent({ id }: Props) {
-  const [subs, setSubs] = useState<Submission[]>([]);
+  const [subs, setSubs] = useState<SubmissionHistoryType[]>([]);
 
   useEffect(() => {
     if (!id) return;
-    getSubmissions(String(id)).then(setSubs);
+    SubmissionHistory(id).then(setSubs).catch(console.error);
   }, [id]);
+
   return (
     <div className="flex flex-col gap-3">
       <div>
@@ -19,11 +19,11 @@ function HistoryComponent({ id }: Props) {
       <div className="flex gap-3 overflow-x-scroll">
         {subs.map((s) => (
           <div
-            key={s.id}
+            key={s.submissionId}
             className="border-1 rounded-xl h-[118px] w-[315px] p-2 flex flex-col justify-around shrink-0 mb-3"
           >
             <h1 className="text-black font-bold">
-              {new Date(s.date).toLocaleDateString("en-GB")}
+              {new Date(s.submittedAt).toLocaleDateString("en-GB")}
             </h1>
             <div className="flex gap-3">
               <div className="flex gap-1">
@@ -33,7 +33,9 @@ function HistoryComponent({ id }: Props) {
                   width={20}
                   height={20}
                 />
-                <p className="text-black">{s.timeTaken}</p>
+                <p className="text-black">
+                  {Math.round(s.timeTakenSeconds / 60)} mins taken
+                </p>
               </div>
               <div className="flex gap-1">
                 <p className="text-black">

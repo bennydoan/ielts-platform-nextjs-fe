@@ -3,10 +3,10 @@ import Image from "next/image";
 import { QuestionGroup } from "@/libs/testBank";
 type Props = {
   group: QuestionGroup;
-  // answers: Record<number, string>;
-  // setAnswer: (questionId: number, value: string) => void;
+  answers: Record<number, string>;
+  setAnswer: (questionId: number, value: string) => void;
 };
-function ChooseTheCorrectAnswer({ group }: Props) {
+function ChooseTheCorrectAnswer({ group, answers, setAnswer }: Props) {
   if (!group.sharedOptions) return null;
 
   return (
@@ -54,8 +54,8 @@ function ChooseTheCorrectAnswer({ group }: Props) {
                       type="radio"
                       name={`q-${q.questionNumber}`}
                       value={sharedOption}
-                      // checked={answers[q.id] === sharedOption}
-                      // onChange={() => setAnswer(q.id, sharedOption)}
+                      checked={answers[q.questionNumber] === sharedOption}
+                      onChange={() => setAnswer(q.questionNumber, sharedOption)}
                       className="h-4 w-4"
                     />
                   </td>

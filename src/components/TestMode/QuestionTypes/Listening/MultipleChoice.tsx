@@ -2,12 +2,12 @@ import Image from "next/image";
 import { QuestionGroup } from "@/libs/testBank";
 type Props = {
   group: QuestionGroup;
-  // answers: Record<number, string>;
-  // setAnswer: (questionId: number, value: string) => void;
+  answers: Record<number, string>;
+  setAnswer: (questionId: number, value: string) => void;
 };
 
-function MultipleChoice({ group }: Props) {
-  //, answers, setAnswer
+function MultipleChoice({ group, answers, setAnswer }: Props) {
+  //
   return (
     <div className="flex items-start gap-6">
       <div className="flex flex-col gap-4">
@@ -29,10 +29,10 @@ function MultipleChoice({ group }: Props) {
                     type="radio"
                     name={`q-${question.questionNumber}`}
                     value={option}
-                    // checked={answers[question.questionNumber] === option}
-                    // onChange={() => {
-                    //   setAnswer(question.questionNumber, option);
-                    // }}
+                    checked={answers[question.questionNumber] === option}
+                    onChange={() => {
+                      setAnswer(question.questionNumber, option);
+                    }}
                   />
                   {String.fromCharCode(65 + i)}. {option}
                 </label>

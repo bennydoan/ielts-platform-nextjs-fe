@@ -1,24 +1,24 @@
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import ResultTable from "./ResultTable";
-import Chart from "./Chart";
-import { getSubmissions, type Submission } from "@/libs/submission";
+// import { useState, useEffect } from "react";
+// import ResultTable from "./ResultTable";
+// import Chart from "./Chart";
+// import { getSubmissions, type Submission } from "@/libs/submission";
 function ResultAnalysis() {
-  const [skillShown, setSkillShown] = useState<string>("");
+  // const [skillShown, setSkillShown] = useState<string>("");
 
-  const [active, setActive] = useState<"all" | "specific">("all");
+  // const [active, setActive] = useState<"all" | "specific">("all");
 
-  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  // const [submissions, setSubmissions] = useState<Submission[]>([]);
 
   // load all submissions once, share them with the table and the chart
-  useEffect(() => {
-    getSubmissions().then(setSubmissions);
-  }, []);
+  // useEffect(() => {
+  //   getSubmissions().then(setSubmissions);
+  // }, []);
 
-  const baseClass =
-    "text-gray-400 text-body leading-[21px] px-4 py-2 rounded-md border-2 border-gray-400 cursor-pointer min-h-10";
-  const activeClass =
-    " bg-black text-white text-body leading-[21px] px-4 py-2 rounded-md border-2 border-black cursor-pointer min-h-10";
+  // const baseClass =
+  //   "text-gray-400 text-body leading-[21px] px-4 py-2 rounded-md border-2 border-gray-400 cursor-pointer min-h-10";
+  // const activeClass =
+  //   " bg-black text-white text-body leading-[21px] px-4 py-2 rounded-md border-2 border-black cursor-pointer min-h-10";
 
   return (
     <div className="md:p-20 p-2 lg:w-[70%] w-full flex flex-col gap-8">
@@ -34,7 +34,7 @@ function ResultAnalysis() {
         </Link>
       </div>
 
-      <div className="flex gap-3">
+      {/* <div className="flex gap-3">
         <button
           onClick={() => {
             setActive("all");
@@ -57,11 +57,11 @@ function ResultAnalysis() {
           <option value="Listening">Listening</option>
           <option value="Writting">Writting</option>
         </select>
-      </div>
+      </div> */}
 
-      <ResultTable filterTest={skillShown} submissions={submissions} />
+      {/* <ResultTable filterTest={skillShown} submissions={submissions} />
 
-      <Chart filterTest={skillShown} submissions={submissions} />
+      <Chart filterTest={skillShown} submissions={submissions} /> */}
     </div>
   );
 }
