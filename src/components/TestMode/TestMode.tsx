@@ -2,14 +2,15 @@ import TestHeader from "./TestHeader";
 import TestQuestioningBox from "./TestQuestioningBox";
 import TestFooter from "./TestFooter";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 // import { saveSubmission } from "@/libs/submission";
-// import getBandScore from "@/utils/getBandScore";
+import { submitTest } from "@/libs/submission";
 import { TestDetails, getTestContent } from "@/libs/testBank";
+import { toast } from "sonner";
 
 function TestMode() {
   const router = useRouter();
-  const { TestID } = router.query; // Test ID is a string
+  const { TestID } = router.query;
 
   const [test, setTest] = useState<TestDetails | null>(null);
 
@@ -22,79 +23,106 @@ function TestMode() {
   }, [router.isReady, TestID]);
 
   const [selectedSection, setSelectedSection] = useState<number>(1);
-  // const [isSubmitted, setIsSubmitted] = useState(false); // check if the test has been submitted or not
+  const [isSubmitted, setIsSubmitted] = useState(false); // check if the test has been submitted or not
 
-  // const [answers, setAnswers] = useState<Record<number, string>>({}); // keys are number and values are string, this is an object as well , answer gonna be an object of question ID and answers
-  // const startTimeRef = useRef(Date.now()); // recorded once, when TestMode first mounts
+  const [answers, setAnswers] = useState<Record<number, string>>({}); // keys are number and values are string, this is an object as well , answer gonna be an object of question ID and answers
+  const startTimeRef = useRef(Date.now()); // recorded once, when TestMode first mounts
 
-  // const setAnswer = (questionId: number, value: string) =>
-  //   setAnswers((prev) => ({ ...prev, [questionId]: value }));
+  const setAnswer = (questionNumber: number, value: string) =>
+    setAnswers((prev) => ({ ...prev, [questionNumber]: value })); // this answer object will be submitted when users click submit
 
-  // // this is the function to get all the testID, this will return the array of testid
-  // function getAllQuestionIds(test: Test | undefined): number[] {
-  //   if (!test) return [];
+  // this is the function to get all the testID, this will return the array of testid
+  function getAllQuestionNumber(test: TestDetails | null): number[] {
+    if (!test) return [];
 
-  //   return test.sections.flatMap((section) =>
-  //     section.groups.flatMap((group) => group.questions.map((q) => q.id)),
-  //   );
-  // }
+    return test.sections.flatMap((section) =>
+      section.groups.flatMap((group) =>
+        group.questions.map((q) => q.questionNumber),
+      ),
+    );
+  }
 
-  // async function handleSubmitTest() {
-  //   setIsSubmitted(true);
-  //   const allQuestionIds = getAllQuestionIds(test); // get all the ids
-  //   const completeAnswers: Record<number, string | null> = Object.fromEntries(
-  //     allQuestionIds.map((id) => [id, answers[id] || null]),
-  //   );
+  async function handleSubmitTest() {
+    if (!test || isSubmitted) return;
 
-  //   const timeTakenSeconds = Math.floor(
-  //     (Date.now() - startTimeRef.current) / 1000,
-  //   );
-  //   const minutes = Math.floor(timeTakenSeconds / 60);
-  //   const seconds = timeTakenSeconds % 60;
-  //   const timeTaken = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    setIsSubmitted(true);
 
-  //   const allQuestions =
-  //     test?.sections.flatMap((s) => s.groups.flatMap((g) => g.questions)) ?? [];
+    try {
+      const allQuestionNumber = getAllQuestionNumber(test);
 
-  //   const rawScore = allQuestions.filter((q) =>
-  //     q.correctAnswer
-  //       .map((a) => a.toLowerCase())
-  //       .includes((answers[q.id] ?? "").toLowerCase()),
-  //   ).length;
+      const completeAnswers: Record<number, string | null> = Object.fromEntries(
+        allQuestionNumber.map((num) => [num, answers[num] ?? null]),
+      );
 
-  //   const band = getBandScore(rawScore); // import from "@/utils/getBandScore"
+      const timeTakenSeconds = Math.floor(
+        (Date.now() - startTimeRef.current) / 1000,
+      );
 
-  //   const submissionId = String(Date.now());
+      await submitTest({
+        // const submit =
+        testId: test.id,
+        answers: completeAnswers,
+        timeTakenSeconds,
+      });
 
-  //   await saveSubmission({
-  //     id: submissionId,
-  //     testId: String(TestID),
-  //     userId: "guest",
-  //     answers: completeAnswers,
-  //     rawScore,
-  //     band,
-  //     timeTaken,
-  //     date: new Date().toISOString(),
-  //   });
-  //   router.push(
-  //     `/ielts-tests/${category}/result/${TestID}?resultId=${submissionId}`,
-  //   );
-  // }
+      // router.push(
+      //   `/ielts-tests/${category}/result/${test.id}?resultId=${result.submissionId}`,
+      // );
+    } catch (error) {
+      setIsSubmitted(false);
+      toast.error(error instanceof Error ? error.message : "Submit failed");
+    }
+  }
+
+  // const timeTakenSeconds = Math.floor(
+  //   (Date.now() - startTimeRef.current) / 1000,
+  // );
+  // const minutes = Math.floor(timeTakenSeconds / 60);
+  // const seconds = timeTakenSeconds % 60;
+  // const timeTaken = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+  // const allQuestions =
+  //   test?.sections.flatMap((s) => s.groups.flatMap((g) => g.questions)) ?? [];
+
+  // const rawScore = allQuestions.filter((q) =>
+  //   q.correctAnswer
+  //     .map((a) => a.toLowerCase())
+  //     .includes((answers[q.id] ?? "").toLowerCase()),
+  // ).length;
+
+  // const band = getBandScore(rawScore); // import from "@/utils/getBandScore"
+
+  // const submissionId = String(Date.now());
+
+  // await saveSubmission({
+  //   id: submissionId,
+  //   testId: String(TestID),
+  //   userId: "guest",
+  //   answers: completeAnswers,
+  //   rawScore,
+  //   band,
+  //   timeTaken,
+  //   date: new Date().toISOString(),
+  // });
+  // router.push(
+  //   `/ielts-tests/${category}/result/${TestID}?resultId=${submissionId}`,
+  // );
+
   return (
     <div className=" flex flex-col gap-10">
       {/* test header */}
       <TestHeader
         test={test}
         selectedSection={selectedSection}
-        // onSubmit={handleSubmitTest}
-        // isTestSubmitted={isSubmitted} // if the test is submitted
+        onSubmit={handleSubmitTest}
+        isTestSubmitted={isSubmitted} // if the test is submitted
       />
       {/* Test Question Box */}
       <TestQuestioningBox
         test={test}
         selectedSection={selectedSection}
-        // answers={answers}
-        // setAnswer={setAnswer}
+        answers={answers}
+        setAnswer={setAnswer}
       />
 
       {/* Test section Controller */}
@@ -103,8 +131,8 @@ function TestMode() {
           test={test}
           selectedSection={selectedSection}
           setSelectedSection={setSelectedSection}
-          // answers={answers}
-          // onSubmit={handleSubmitTest}
+          answers={answers}
+          onSubmit={handleSubmitTest}
         />
       )}
     </div>

@@ -1,33 +1,66 @@
-export type Submission = {
-  id: string;
-  testId: string; // courseID
-  userId: string;
+// what we SEND (must match SubmitTestDto in the BE)
+export type SubmitTestRequest = {
+  testId: number;
   answers: Record<number, string | null>;
-  rawScore: number; // new
-  band: number; // new
-  timeTaken: string;
-  date: string;
+  timeTakenSeconds: number;
 };
 
-// this one will store the submission
-export async function saveSubmission(s: Submission) {
-  const all = JSON.parse(localStorage.getItem("testSubmissions") ?? "[]"); // store in an array first
-  all.push(s);
-  localStorage.setItem("testSubmissions", JSON.stringify(all));
+// what we GET BACK (matches SubmissionResultDto, camelCase)
+export type SubmissionAnswer = {
+  questionNumber: number;
+  userAnswer: string | null;
+  isCorrect: boolean;
+};
+
+export type SubmissionResult = {
+  submissionId: number;
+  testId: number;
+  rawScore: number;
+  band: number;
+  timeTakenSeconds: number;
+  submittedAt: string;
+  answers: SubmissionAnswer[];
+};
+
+export type SubmissionHistoryType = {
+  submissionId: number;
+  band: number;
+  timeTakenSeconds: number;
+  submittedAt: string;
+};
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+// POST: submit answers, BE grades them
+export async function submitTest(
+  body: SubmitTestRequest,
+): Promise<SubmissionResult> {
+  const response = await fetch(`${API_URL}/api/Submission/submit`, {
+    method: "POST",
+    credentials: "include", // send the login cookie, the endpoint is [Authorize]
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || "Can not submit");
+  }
+  return response.json();
 }
 
-export async function getSubmissions(testId?: string): Promise<Submission[]> {
-  const all: Submission[] = JSON.parse(
-    localStorage.getItem("testSubmissions") ?? "[]",
-  );
-  const filtered = testId ? all.filter((s) => s.testId === testId) : all;
-  return filtered.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  );
-}
+// GET : get submission
 
-export async function getLatestSubmission(testId: string) {
-  // this one is fof the result page get the latest that just be submitted
-  const list = await getSubmissions(testId);
-  return list.at(0) ?? null;
+export async function SubmissionHistory(
+  testID: number,
+): Promise<SubmissionHistoryType[]> {
+  const response = await fetch(`${API_URL}/api/Submission/history/${testID}`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || "Can not get submission history");
+  }
+  return response.json();
 }

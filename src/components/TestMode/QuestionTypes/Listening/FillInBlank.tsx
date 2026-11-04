@@ -2,12 +2,12 @@ import Image from "next/image";
 import { QuestionGroup } from "@/libs/testBank";
 type Props = {
   group: QuestionGroup;
-  // answers: Record<number, string>;
-  // setAnswer: (questionId: number, value: string) => void;
+  answers: Record<number, string>;
+  setAnswer: (questionNumber: number, value: string) => void;
 };
 
-function FillInTheBlank({ group }: Props) {
-  //, answers, setAnswer
+function FillInTheBlank({ group, answers, setAnswer }: Props) {
+  //
   return (
     <div className="flex items-center gap-5">
       {group.imageUrl && (
@@ -34,15 +34,15 @@ function FillInTheBlank({ group }: Props) {
                   id={`q-${part.questionNumber}`}
                   name={`q-${part.questionNumber}`}
                   type="text"
-                  // value={
-                  //   part.questionNumber !== null
-                  //     ? (answers[part.questionNumber] ?? "")
-                  //     : ""
-                  // }
-                  // onChange={(e) => {
-                  //   if (part.questionNumber !== null)
-                  //     setAnswer(part.questionNumber, e.target.value);
-                  // }}
+                  value={
+                    part.questionNumber !== null
+                      ? (answers[part.questionNumber] ?? "") // answer[questionNumber] -> to get the value in the answer object
+                      : ""
+                  }
+                  onChange={(e) => {
+                    if (part.questionNumber !== null)
+                      setAnswer(part.questionNumber, e.target.value);
+                  }}
                   className="border border-gray-300 rounded-md px-2 py-1 mx-1 text-black inline-block w-32"
                 />
               ),
