@@ -10,6 +10,7 @@ export type SubmissionAnswer = {
   questionNumber: number;
   userAnswer: string | null;
   isCorrect: boolean;
+  correctAnswers: string[];
 };
 
 export type SubmissionResult = {
@@ -49,7 +50,7 @@ export async function submitTest(
   return response.json();
 }
 
-// GET : get submission
+// GET : get submissionHistory
 
 export async function SubmissionHistory(
   testID: number,
@@ -61,6 +62,24 @@ export async function SubmissionHistory(
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(errorText || "Can not get submission history");
+  }
+  return response.json();
+}
+
+// get SubmissionResult
+export async function getSubmissionResult(
+  submissionID: number,
+): Promise<SubmissionResult> {
+  const response = await fetch(
+    `${API_URL}/api/Submission/getSubmissionResult/${submissionID}`,
+    {
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || "Can not get submission result");
   }
   return response.json();
 }
