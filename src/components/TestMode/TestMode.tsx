@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 function TestMode() {
   const router = useRouter();
-  const { TestID } = router.query;
+  const { TestID, category } = router.query;
 
   const [test, setTest] = useState<TestDetails | null>(null);
 
@@ -58,16 +58,15 @@ function TestMode() {
         (Date.now() - startTimeRef.current) / 1000,
       );
 
-      await submitTest({
-        // const submit =
+      const submit = await submitTest({
         testId: test.id,
         answers: completeAnswers,
         timeTakenSeconds,
       });
 
-      // router.push(
-      //   `/ielts-tests/${category}/result/${test.id}?resultId=${result.submissionId}`,
-      // );
+      router.push(
+        `/ielts-tests/${category}/result/${test.id}?SubmissionID=${submit.submissionId}`,
+      );
     } catch (error) {
       setIsSubmitted(false);
       toast.error(error instanceof Error ? error.message : "Submit failed");
